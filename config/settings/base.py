@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 # ------------------------------------
 # Base Directory
 # ------------------------------------
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # ------------------------------------
 # Security
