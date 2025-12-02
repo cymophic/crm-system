@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Main Application Service
+  web:
+    build: .
+    # Gunicorn command
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_data:/vol/web/static # Volume for collected static files
+      - media_data:/vol/web/media   # Volume for media files
+    ports:
+      - "8000:8000"
+    env_file: .env # Load environment variables
+    environment:
+      # Database and Redis connections
+      DATABASE_PROD: postgres://user:password@db:5432/dbname
+      REDIS_URL: redis://redis:6379/1
+      STATIC_ROOT: /vol/web/static # Must match volume mount
+    depends_on:
+      - db
+      - redis
+
+  # PostgreSQL Database Service
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      # These must match values in web.environment.DATABASE_PROD
+      POSTGRES_DB: dbname
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+  # Redis Cache Service
+  redis:
+    image: redis:7-alpine
+
+# Volumes for persistent data storage
+volumes:
+  postgres_data:
+  static_data:
+  media_data:
