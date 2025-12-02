@@ -28,6 +28,7 @@ dependencies = [
     { name = "dj-database-url" },
     { name = "django" },
     { name = "django-csp" },
+    { name = "django-currentuser" },
     { name = "django-money" },
     { name = "django-phonenumber-field", extra = ["phonenumbers"] },
     { name = "django-redis" },
@@ -46,6 +47,7 @@ requires-dist = [
     { name = "dj-database-url", specifier = ">=3.0.1" },
     { name = "django", specifier = ">=5.2.8" },
     { name = "django-csp", specifier = ">=4.0" },
+    { name = "django-currentuser", specifier = ">=0.9.0" },
     { name = "django-money", specifier = ">=3.5.4" },
     { name = "django-phonenumber-field", extras = ["phonenumbers"], specifier = ">=8.4.0" },
     { name = "django-redis", specifier = ">=6.0.0" },
@@ -94,6 +96,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/52/db/23567744dff2169aadb095f726088074476b24dfff5a759ffcf6389cf401/django_csp-4.0.tar.gz", hash = "sha256:b27010bb702eb20a3dad329178df2b61a2b82d338b70fbdc13c3a3bd28712833", size = 20028, upload-time = "2025-04-02T16:41:46.721Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e1/a4/736ab90ee527a23e194d1ce7358c6bcced66381ced83c28268b4aea236f7/django_csp-4.0-py3-none-any.whl", hash = "sha256:d5a0a05463a6b75a4f1fc1828c58c89af8db9364d09fc6e12f122b4d7f3d00dc", size = 25689, upload-time = "2025-04-02T16:41:45.689Z" },
+]
+
+[[package]]
+name = "django-currentuser"
+version = "0.9.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5b/1e/cf607b4c5474fa98e060c81dab74f3170691fc84d68e1366207cd43085c6/django_currentuser-0.9.0.tar.gz", hash = "sha256:3805fe2ef2a85456c6b791417e0bf782e62c8d8fa021c280d96624b1e942e504", size = 13712, upload-time = "2025-04-08T12:28:56.473Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2e/e2/7bc0aba295a76e5ffa30fa5244d69b7a03ac2dc358a8f74f2511741189da/django_currentuser-0.9.0-py2.py3-none-any.whl", hash = "sha256:df03a9eb7cb39983def680c1cd22e605f16adf8d315a06e706ddd97d5f7e2fbb", size = 7768, upload-time = "2025-04-08T12:28:55.376Z" },
 ]
 
 [[package]]
