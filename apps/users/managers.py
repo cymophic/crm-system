@@ -11,7 +11,7 @@ class UserManager(BaseUserManager):
         first_clean = first_name.replace(" ", "").lower()
         last_clean = last_name.replace(" ", "").lower()
         base_username = f"{first_clean}.{last_clean}"
-        username = base_username
+        username = base_username[:50]
         counter = 1
 
         # Handle duplicates by appending a number

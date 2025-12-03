@@ -24,9 +24,10 @@ class User(AbstractUser):
         "username",
     ]
 
-    # Override default fields to make them required
+    # Default field overrides
     first_name = models.CharField(verbose_name="First Name", max_length=150)
     last_name = models.CharField(verbose_name="Last Name", max_length=150)
+    username = models.CharField(verbose_name="Username", max_length=50, unique=True)
     email = models.EmailField(verbose_name="Email Address", unique=True)
 
     # Custom fields

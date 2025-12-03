@@ -32,9 +32,9 @@ human_name_validator = RegexValidator(
 
 # Validates usernames (3–30 chars: letters, numbers, underscore, dot, hyphen).
 username_validator = RegexValidator(
-    regex=r"^(?=.{3,30}$)[A-Za-z0-9._-]+$",
+    regex=r"^(?=.{3,50}$)[A-Za-z0-9._-]+$",
     message=_(
-        "Must be 3 to 30 characters, using only letters, numbers, underscores (_), dots (.), or hyphens (-)."
+        "Must be 3 to 50 characters, using only letters, numbers, underscores (_), dots (.), or hyphens (-)."
     ),
     code="invalid_username",
 )
