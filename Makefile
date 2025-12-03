@@ -1,4 +1,4 @@
-.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash clean shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
+.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
 
 
 # ------------------------------------
@@ -75,12 +75,12 @@ bash:
 	@docker-compose exec app bash
 
 # Removes everything (WARNING: deletes data)
-clean:
+reset:
 	@echo Removing ALL containers and volumes...
 	@docker-compose down -v
 	@echo Removing SQLite database...
 	@uv run python -c "import os; os.remove('db.sqlite3') if os.path.exists('db.sqlite3') else None"
-	@echo Cleaning complete...
+	@echo Reset complete...
 
 # ------------------------------------
 # Application Management
