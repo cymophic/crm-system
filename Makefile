@@ -1,3 +1,5 @@
+MAKEFLAGS += --no-print-directory
+
 .PHONY: setup-dev dev dev-build prod prod-build build status down restart bash reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
 
 
@@ -9,12 +11,12 @@
 setup-dev:
 	@echo Setting up containers...
 	@docker-compose up -d --build
-	@echo ""
+	@uv run python -c "print()"
 	@$(MAKE) migrate
-	@echo ""
+	@uv run python -c "print()"
 	@$(MAKE) superuser
 	@echo Development setup complete!
-	@echo ""
+	@uv run python -c "print()"
 	@$(MAKE) service-logs
 
 
