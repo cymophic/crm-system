@@ -9,10 +9,13 @@
 setup-dev:
 	@echo Setting up containers...
 	@docker-compose up -d --build
+	@echo ""
 	@$(MAKE) migrate
+	@echo ""
 	@$(MAKE) superuser
 	@echo Development setup complete!
-
+	@echo ""
+	@$(MAKE) service-logs
 
 
 # ------------------------------------
@@ -80,6 +83,12 @@ reset:
 	@docker-compose down -v
 	@echo Removing SQLite database...
 	@uv run python -c "import os; os.remove('db.sqlite3') if os.path.exists('db.sqlite3') else None"
+	@echo Removing logs folder...
+	@uv run python -c "import shutil, os; shutil.rmtree('logs') if os.path.exists('logs') else None"
+	@echo Removing media folder...
+	@uv run python -c "import shutil, os; shutil.rmtree('media') if os.path.exists('media') else None"
+	@echo Removing staticfiles folder...
+	@uv run python -c "import shutil, os; shutil.rmtree('staticfiles') if os.path.exists('staticfiles') else None"
 	@echo Reset complete...
 
 # ------------------------------------
