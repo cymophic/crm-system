@@ -2,8 +2,8 @@
 FROM python:3.13-slim-bookworm
 
 # Environment setup
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 # Create folder and set as working directory
 WORKDIR /app
