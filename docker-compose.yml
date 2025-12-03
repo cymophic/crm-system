@@ -1,43 +1,42 @@
-version: '3.8'
-
 services:
-  # Main Application Service
-  web:
-    build: .
-    # Gunicorn command
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
-    volumes:
-      - static_data:/vol/web/static # Volume for collected static files
-      - media_data:/vol/web/media   # Volume for media files
-    ports:
-      - "8000:8000"
-    env_file: .env # Load environment variables
-    environment:
-      # Database and Redis connections
-      DATABASE_PROD: postgres://user:password@db:5432/dbname
-      REDIS_URL: redis://redis:6379/1
-      STATIC_ROOT: /vol/web/static # Must match volume mount
-    depends_on:
-      - db
-      - redis
-
-  # PostgreSQL Database Service
   db:
-    image: postgres:14-alpine
+    image: postgres:16-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      # These must match values in web.environment.DATABASE_PROD
-      POSTGRES_DB: dbname
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  # Redis Cache Service
   redis:
     image: redis:7-alpine
+    ports:
+      - "6379:6379"
 
-# Volumes for persistent data storage
+  web:
+    build: .
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
 volumes:
   postgres_data:
-  static_data:
-  media_data:
+  static_volume:
+  media_volume:

@@ -5,33 +5,33 @@ FROM python:3.13-slim-bookworm
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-# Set working directory
+# Create folder and set as working directory
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       build-essential \
-       libpq-dev \
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install Python dependencies using uv
-COPY pyproject.toml uv.lock ./ 
+# Copy dependency files for caching
+COPY pyproject.toml uv.lock ./
 
-# Use uv sync --locked to install packages based on uv.lock
-RUN uv sync --locked
+# Install dependencies
+RUN uv sync --frozen --no-dev
 
 # Copy project code
 COPY . .
 
-# Prepare static files for WhiteNoise
-RUN python manage.py collectstatic --noinput
+# Copy and set entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # Expose Gunicorn port
 EXPOSE 8000
 
 # Run Gunicorn
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
