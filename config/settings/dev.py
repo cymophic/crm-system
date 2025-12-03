@@ -27,6 +27,10 @@ CSRF_COOKIE_HTTPONLY = True
 
 # Content Security Policy
 CSP_REPORT_ONLY = True
+CONTENT_SECURITY_POLICY = CONTENT_SECURITY_POLICY.copy()
+CONTENT_SECURITY_POLICY["DIRECTIVES"] = CONTENT_SECURITY_POLICY["DIRECTIVES"].copy()
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["style-src"] = [SELF, "'unsafe-inline'"]
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["script-src"] = [SELF, "'unsafe-inline'"]
 
 # ------------------------------------
 # Admin
