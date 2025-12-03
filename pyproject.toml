@@ -21,4 +21,5 @@ dependencies = [
 [dependency-groups]
 prod = [
     "gunicorn>=23.0.0",
+    "psycopg[c]>=3.3.1",
 ]
