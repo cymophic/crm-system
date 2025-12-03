@@ -43,6 +43,8 @@ CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 
 # Content Security Policy
 CSP_REPORT_ONLY = False
+CONTENT_SECURITY_POLICY = CONTENT_SECURITY_POLICY.copy()
+CONTENT_SECURITY_POLICY["DIRECTIVES"] = CONTENT_SECURITY_POLICY["DIRECTIVES"].copy()
 
 # ------------------------------------
 # Admin

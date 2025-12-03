@@ -16,8 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
-        "script-src": [SELF],
-        "style-src": [SELF],
+        "script-src": [SELF, "'unsafe-inline'", "'unsafe-eval'",],
+        "style-src": [SELF, "'unsafe-inline'"],
         "img-src": [SELF, "data:"],
         "font-src": [SELF],
         "connect-src": [SELF],
