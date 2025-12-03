@@ -52,7 +52,7 @@ class User(AbstractUser):
                 f"Phone: {self.get_field('phone')}, "
                 f"First Name: {self.get_field('first_name')}, "
                 f"Last Name: {self.get_field('last_name')}, "
-                f"Job Title: {self.get_field('job_title')}, "
+                f"Job Title: {self.get_field('job_title')}"
             )
 
     @property
