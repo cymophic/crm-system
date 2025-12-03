@@ -22,7 +22,7 @@ services:
     ports:
       - "6379:6379"
 
-  web:
+  app:
     build: .
     volumes:
       - .:/app
@@ -32,6 +32,13 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    depends_on:
+      db:
+        condition: service_healthy
+        required: false
+      redis:
+        condition: service_started
+        required: false
 
 volumes:
   postgres_data:
