@@ -118,6 +118,11 @@ See `.env.example` for complete configuration details.
 
 ## 💻 Custom Project Commands
 
+### Initial Setup
+```bash
+make setup-dev           # Complete setup for development (builds, migrates, creates superuser)
+```
+
 ### Development
 ```bash
 make dev                 # Start development environment
@@ -149,9 +154,11 @@ make test                # Run test suite
 
 ### Container Management
 ```bash
+make build               # Build Docker images
 make status              # Show container status
 make restart             # Restart containers
 make down                # Stop and remove containers
+make clean               # Remove cache files (.pyc, __pycache__, etc.)
 make reset               # Remove ALL containers, volumes, and data (⚠️ WARNING)
 ```
 

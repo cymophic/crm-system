@@ -1,7 +1,7 @@
 ENVIRONMENT = $(shell docker-compose ps --services --filter "status=running" | grep -E "^(dev|prod)$$" | head -1)
 MAKEFLAGS += --no-print-directory
 
-.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
+.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
 
 # ------------------------------------
 # Setup Commands
@@ -79,6 +79,22 @@ bash:
 	@echo Opening container bash shell...
 	@docker-compose exec $(ENVIRONMENT) bash
 
+# Remove generated files and caches (keeps containers)
+clean:
+	@echo Removing Python cache files...
+	@uv run python -c "import os, shutil, glob; [shutil.rmtree(d) for d in glob.glob('**/__pycache__', recursive=True) if os.path.isdir(d)]"
+	@echo Removing .pyc files...
+	@uv run python -c "import os, glob; [os.remove(f) for f in glob.glob('**/*.pyc', recursive=True) if os.path.isfile(f)]"
+	@echo Removing pytest cache...
+	@uv run python -c "import shutil; shutil.rmtree('.pytest_cache', ignore_errors=True)"
+	@echo Removing .egg-info directories...
+	@uv run python -c "import os, shutil, glob; [shutil.rmtree(d) for d in glob.glob('**/*.egg-info', recursive=True) if os.path.isdir(d)]"
+	@echo Removing macOS Finder files...
+	@uv run python -c "import os, glob; [os.remove(f) for f in glob.glob('**/.DS_Store', recursive=True) if os.path.isfile(f)]"
+	@echo Removing Thumbs.db files...
+	@uv run python -c "import os, glob; [os.remove(f) for f in glob.glob('**/Thumbs.db', recursive=True) if os.path.isfile(f)]"
+	@echo Clean complete!
+
 # Removes everything (WARNING: deletes data)
 reset:
 	@echo Removing ALL containers and volumes...
@@ -91,7 +107,7 @@ reset:
 	@uv run python -c "import shutil, os; shutil.rmtree('media') if os.path.exists('media') else None"
 	@echo Removing staticfiles folder...
 	@uv run python -c "import shutil, os; shutil.rmtree('staticfiles') if os.path.exists('staticfiles') else None"
-	@echo Reset complete...
+	@echo Reset complete!
 
 # ------------------------------------
 # Application Management
@@ -143,7 +159,7 @@ test:
 
 # Display all services output logs
 service-logs:
-	@uv run python -c "print('Streaming service logs (Ctrl+C to exit)...')"
+	@uv run python -c "'Streaming service logs (Ctrl+C to exit)...')"
 	-@docker-compose logs $(ENVIRONMENT) -f
 
 # View application logs (from logs/app.log)
