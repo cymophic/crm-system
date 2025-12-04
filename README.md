@@ -30,7 +30,7 @@ crm-system/
 ├── apps/                         # Django applications
 │   ├── common/                   # Shared utilities across all apps
 │   └── users/                    # User management and authentication
-├── config/                       # Django project settings
+├── config/                        # Django project settings
 │   └── settings/                 # Split settings (base, dev, prod)
 │       ├── __init__.py
 │       ├── base.py
@@ -42,16 +42,16 @@ crm-system/
 │   └── errors.log                # Error-only logs
 ├── media/                        # User-uploaded files
 ├── static/                       # Project-wide static files
-├── staticfiles/                  # Collected static files for production
+├── staticfiles/                   # Collected static files for production
 ├── templates/                    # Project-wide HTML templates
 ├── .dockerignore
 ├── .env                          # Environment variables (ignored by Git)
 ├── .env.example                  # Environment variables template
 ├── .gitignore
 ├── docker-compose.yml            # Docker services configuration
-├── docker-entrypoint.sh          # Container startup script
-├── Dockerfile
-├── Makefile                      # Custom project commands
+├── Dockerfile.dev                 # Development Docker configuration
+├── Dockerfile.prod                # Production Docker configuration
+├── Makefile                       # Custom project commands
 ├── manage.py                     # Django management script
 ├── pyproject.toml                # Python dependencies
 ├── README.md
@@ -66,6 +66,7 @@ crm-system/
 
 - **Docker** and **Docker Compose** - [Get Docker](https://docs.docker.com/get-docker/)
 - **Make** - Pre-installed on macOS/Linux, [Windows installation](https://gnuwin32.sourceforge.net/packages/make.htm)
+- **Python 3.13+** and **uv** - [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 ### Quick Start
 
@@ -81,10 +82,16 @@ make setup-dev
 
 ### Configuration
 
-Edit `.env` with your settings. Key variables:
+Edit `.env` with your settings. The `ENVIRONMENT` variable determines which Docker setup runs:
+
+- **`dev` or `development`**: Uses `Dockerfile.dev`, SQLite, Django dev server, and mounts code for live reload
+- **`prod` or `production`**: Uses `Dockerfile.prod`, PostgreSQL, Redis, Gunicorn, and bakes code into the image
+
+Key variables:
 
 ```bash
-# Environment: 'dev' or 'prod'
+# OPTIONS: dev/development or prod/production
+# This controls which Docker Compose profile and Dockerfile are used
 ENVIRONMENT=dev
 
 # Security (auto-generated in dev if empty)
@@ -174,8 +181,8 @@ make django-logs         # View Django logs
 
 ## 📝 Notes
 
-- **Development mode** uses SQLite and runs Django's development server
-- **Production mode** uses PostgreSQL, Redis, and Gunicorn
+- **Development mode** uses SQLite and runs Django's development server with live code reload
+- **Production mode** uses PostgreSQL, Redis, and Gunicorn with immutable container images
 - Logs are automatically rotated (max 10MB per file, 5 backups)
 - Static files are served via WhiteNoise in production
 - Session expires after 1 day or when browser closes
