@@ -57,7 +57,7 @@ prod-build:
 # Build or updates images
 build:
 	@echo Building Docker images...
-	@docker-compose build
+	@docker-compose --profile $(ENVIRONMENT) build
 
 # Display running containers
 status:
@@ -67,12 +67,12 @@ status:
 # Restart containers
 restart:
 	@echo Restarting containers...
-	@docker-compose restart
+	@docker-compose --profile $(ENVIRONMENT) restart
 
 # Stop and remove containers (preserves data)
 down:
 	@echo Stopping and removing containers...
-	@docker-compose --profile dev --profile prod down
+	@docker-compose --profile $(ENVIRONMENT) down
 
 # Container CLI access
 bash:
