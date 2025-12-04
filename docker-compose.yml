@@ -23,7 +23,9 @@ services:
       - "6379:6379"
 
   dev:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     profiles: ["dev"]
     volumes:
       - .:/app
@@ -41,11 +43,11 @@ services:
         required: false
 
   prod:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     profiles: ["prod"]
     volumes:
-      - .:/app
-      - /app/.venv
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     ports:
