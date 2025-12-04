@@ -159,7 +159,7 @@ test:
 
 # Display all services output logs
 service-logs:
-	@uv run python -c "'Streaming service logs (Ctrl+C to exit)...')"
+	@uv run python -c "'Streaming service logs (Ctrl+C to exit)...'"
 	-@docker-compose logs $(ENVIRONMENT) -f
 
 # View application logs (from logs/app.log)
