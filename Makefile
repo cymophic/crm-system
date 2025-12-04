@@ -10,7 +10,7 @@ MAKEFLAGS += --no-print-directory
 # Initial setup for development
 setup-dev:
 	@echo Setting up containers...
-	@docker-compose up -d --build
+	@docker-compose --profile dev up -d --build
 	@uv run python -c "print()"
 	@$(MAKE) migrate
 	@uv run python -c "print()"
