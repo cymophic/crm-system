@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django_currentuser.db.models import CurrentUserField
 
+from apps.common.managers import SoftDeleteManager
+
 
 class AuditMixin(models.Model):
     created_at = models.DateTimeField(
@@ -27,6 +29,16 @@ class SoftDeleteMixin(models.Model):
         verbose_name="Is Deleted", default=False, db_index=True
     )
     deleted_at = models.DateTimeField(verbose_name="Deleted At", null=True, blank=True)
+    deleted_by = CurrentUserField(
+        verbose_name="Deleted By",
+        related_name="%(app_label)s_%(class)s_deleted_by",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    objects = SoftDeleteManager()  # Returns non-deleted records only
+    all_objects = models.Manager()  # Return all records including deleted ones
 
     class Meta:
         abstract = True
@@ -34,12 +46,13 @@ class SoftDeleteMixin(models.Model):
     def soft_delete(self):
         self.is_deleted = True
         self.deleted_at = timezone.now()
-        self.save(update_fields=["is_deleted", "deleted_at"])
+        self.save(update_fields=["is_deleted", "deleted_at", "deleted_by"])
 
     def restore(self):
         self.is_deleted = False
         self.deleted_at = None
-        self.save(update_fields=["is_deleted", "deleted_at"])
+        self.deleted_by = None
+        self.save(update_fields=["is_deleted", "deleted_at", "deleted_by"])
 
 
 class ActiveMixin(models.Model):
