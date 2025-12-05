@@ -14,7 +14,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 
 ## ⚙️ Technologies Used
 
-- **Backend:** Django 5.2.8 (Python 3.13)
+- **Backend:** Django 5.2.8+ (Python 3.13)
 - **Database:** SQLite3 (dev) / PostgreSQL (prod)
 - **Cache:** Local Memory Cache (dev) / Redis (prod)
 - **Admin Interface:** Django Unfold
@@ -67,7 +67,7 @@ crm-system/
 
 - **Docker** and **Docker Compose** - [Get Docker](https://docs.docker.com/get-docker/)
 - **Make** - Pre-installed on macOS/Linux, [Windows installation](https://gnuwin32.sourceforge.net/packages/make.htm)
-- **Python 3.13+** and **uv** - [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+- **Python 3.13** and **uv** - [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 ### Quick Start
 
@@ -85,7 +85,7 @@ make setup-dev
 
 Edit `.env` with your settings. The `ENVIRONMENT` variable determines which Docker setup runs:
 
-- **`dev` or `development`**: Uses `Dockerfile.dev`, SQLite, Django dev server, and mounts code for live reload
+- **`dev` or `development`**: Uses `Dockerfile.dev`, SQLite (with optional PostgreSQL/Redis support), Django dev server, and mounts code for live reload
 - **`prod` or `production`**: Uses `Dockerfile.prod`, PostgreSQL, Redis, Gunicorn, and bakes code into the image
 
 Key Variables:
@@ -184,8 +184,9 @@ make django-logs              # View Django logs
 
 ## 📝 Notes
 
-- **Development mode** uses SQLite and runs Django's development server with live code reload
-- **Production mode** uses PostgreSQL, Redis, and Gunicorn with immutable container images
+- **Development mode** uses SQLite by default and runs Django's development server with live code reload via volume mounting. Optional PostgreSQL and Redis support available.
+- **Production mode** requires PostgreSQL and Redis, runs Gunicorn with immutable container images
 - Logs are automatically rotated (max 10MB per file, 5 backups)
 - Static files are served via WhiteNoise in production
 - Session expires after 1 day or when browser closes
+- **Note:** Make commands require at least one container to be running. If no containers are running, start with `make dev` or `make prod` first.
