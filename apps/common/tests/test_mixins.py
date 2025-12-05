@@ -127,6 +127,31 @@ class SoftDeleteMixinTests(TransactionTestCase):
         obj.restore()
         self.assertFalse(obj.is_deleted)
         self.assertIsNone(obj.deleted_at)
+        self.assertIsNone(obj.deleted_by)
+
+    # Test: objects manager excludes deleted records
+    def test_objects_excludes_deleted(self):
+        active = TestSoftDeleteModel.objects.create(name="Active")
+        deleted = TestSoftDeleteModel.objects.create(name="Deleted")
+        deleted.soft_delete()
+
+        # objects should only return non-deleted
+        queryset = TestSoftDeleteModel.objects.all()
+        self.assertEqual(queryset.count(), 1)
+        self.assertIn(active, queryset)
+        self.assertNotIn(deleted, queryset)
+
+    # Test: all_objects includes deleted records
+    def test_all_objects_includes_deleted(self):
+        active = TestSoftDeleteModel.objects.create(name="Active")
+        deleted = TestSoftDeleteModel.objects.create(name="Deleted")
+        deleted.soft_delete()
+
+        # all_objects should return everything
+        queryset = TestSoftDeleteModel.all_objects.all()
+        self.assertEqual(queryset.count(), 2)
+        self.assertIn(active, queryset)
+        self.assertIn(deleted, queryset)
 
 
 class ActiveMixinTests(TransactionTestCase):
