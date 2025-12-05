@@ -2,7 +2,7 @@ import logging
 
 from django.contrib.auth.models import UserManager as BaseUserManager
 
-logger = logging.getLogger("apps.web")
+logger = logging.getLogger("apps.users")
 
 
 class UserManager(BaseUserManager):
