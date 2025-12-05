@@ -24,34 +24,35 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 
 ## 📁 Project Structure
 
-```
+```bash
 crm-system/
 ├── .venv/                        # Python Virtual Environment (ignored by Git)
 ├── apps/                         # Django applications
 │   ├── common/                   # Shared utilities across all apps
+│   ├── security/                 # Authentication and security
 │   └── users/                    # User management and authentication
-├── config/                       # Django project settings
-│   └── settings/                 # Split settings (base, dev, prod)
-│       ├── __init__.py
-│       ├── base.py
-│       ├── dev.py
-│       └── prod.py
+├── config/                        # Django project settings
+│   ├── formats/                  # Custom date/time formats by locale
+│   ├── settings/                 # Split settings (base, dev, prod)
+│   ├── asgi.py
+│   ├── urls.py
+│   └── wsgi.py
 ├── logs/                         # Application logs (ignored by Git)
 │   ├── app.log                   # Application logs
 │   ├── django.log                # Django framework logs
 │   └── errors.log                # Error-only logs
 ├── media/                        # User-uploaded files
 ├── static/                       # Project-wide static files
-├── staticfiles/                  # Collected static files for production
+├── staticfiles/                   # Collected static files for production
 ├── templates/                    # Project-wide HTML templates
 ├── .dockerignore
 ├── .env                          # Environment variables (ignored by Git)
 ├── .env.example                  # Environment variables template
 ├── .gitignore
 ├── docker-compose.yml            # Docker services configuration
-├── Dockerfile.dev                # Development Docker configuration
-├── Dockerfile.prod               # Production Docker configuration
-├── Makefile                      # Custom project commands
+├── Dockerfile.dev                 # Development Docker configuration
+├── Dockerfile.prod                # Production Docker configuration
+├── Makefile                       # Custom project commands
 ├── manage.py                     # Django management script
 ├── pyproject.toml                # Python dependencies
 ├── README.md
@@ -127,54 +128,56 @@ See `.env.example` for complete configuration details.
 
 ### Initial Setup
 ```bash
-make setup-dev           # Complete setup for development (builds, migrates, creates superuser)
+make setup-dev                # Create initial setup for development
 ```
 
 ### Development
 ```bash
-make dev                 # Start development environment
-make dev-build           # Build and start development environment
-make bash                # Open container bash shell
-make shell               # Open Django shell
+make dev                      # Start development environment
+make dev-build                # Build and start development environment
+make bash                     # Open container bash shell
+make shell                    # Open Django shell
 ```
 
 ### Production
 ```bash
-make prod                # Start production environment
-make prod-build          # Build and start production environment
+make prod                     # Start production environment
+make prod-build               # Build and start production environment
 ```
 
 ### Database
 ```bash
-make migrate             # Apply database migrations
-make migrations          # Create new migrations
-make showmigrations      # Show migration status
+make migrate                  # Apply database migrations
+make migrations               # Create new migrations
+make showmigrations           # Show migration status
 ```
 
 ### Application Management
 ```bash
-make superuser           # Create Django superuser
-make collectstatic       # Collect static files
-make check               # Check for project issues
-make test                # Run test suite
+make superuser                # Create Django superuser
+make collectstatic            # Collect static files
+make check                    # Check for project issues
+make test                     # Run test suite
+make manage.py cmd="..."      # Run custom manage.py command
 ```
 
 ### Container Management
 ```bash
-make build               # Build Docker images
-make status              # Show container status
-make restart             # Restart containers
-make down                # Stop and remove containers
-make clean               # Remove cache files (.pyc, __pycache__, etc.)
-make reset               # Remove ALL containers, volumes, and data (⚠️ WARNING)
+make build                    # Build Docker images
+make status                   # Show container status
+make restart                  # Restart containers
+make down                     # Stop and remove containers
+make clean                    # Remove cache and OS-generated files
+make reset                    # Remove ALL containers, volumes, and data
 ```
 
 ### Logs
 ```bash
-make service-logs        # Stream all service logs
-make app-logs            # View application logs
-make error-logs          # View error logs
-make django-logs         # View Django logs
+make service-logs             # Show last 20 lines of service logs
+make service-logs lines=50    # Show last 50 lines
+make app-logs                 # View application logs
+make error-logs               # View error logs
+make django-logs              # View Django logs
 ```
 
 ---
