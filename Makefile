@@ -1,9 +1,6 @@
 MAKEFLAGS += --no-print-directory
-ifeq ($(OS),Windows_NT)
-    ENVIRONMENT := $(shell docker-compose ps --services --filter "status=running" | more +0)
-else
-    ENVIRONMENT := $(shell docker-compose ps --services --filter "status=running" | head -1)
-endif
+-include .env
+export ENVIRONMENT ?= dev
 
 .PHONY: setup-dev dev dev-build prod prod-build build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test manage.py service-logs app-logs error-logs django-logs
 
