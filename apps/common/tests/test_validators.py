@@ -1,9 +1,8 @@
-import logging
-import warnings
 from datetime import date, timedelta
 
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.db import connection, models
+from django.test import TestCase, TransactionTestCase
 
 from apps.common.validators import (
     age_at_least,
@@ -17,18 +16,58 @@ from apps.common.validators import (
     slug_validator,
     username_validator,
     uuid_validator,
+    validate_unique_field,
 )
 
-# Disable all logging during tests
-logging.disable(logging.CRITICAL)
+# ------------------------------------
+# Test Models
+# ------------------------------------
 
 
-# Suppress staticfiles warning during tests
-warnings.filterwarnings(
-    "ignore",
-    message="No directory at.*staticfiles",
-    category=UserWarning,
-)
+class TestUniqueModel(models.Model):
+    email = models.EmailField(unique=True)
+
+    class Meta:
+        app_label = "common"
+
+
+# ------------------------------------
+# Test Cases
+# ------------------------------------
+
+
+class UniqueFieldValidatorTests(TransactionTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        with connection.schema_editor() as schema_editor:
+            schema_editor.create_model(TestUniqueModel)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        with connection.schema_editor() as schema_editor:
+            schema_editor.delete_model(TestUniqueModel)
+
+    # Test: accepts unique value
+    def test_validate_unique_field_accepts_unique(self):
+        TestUniqueModel.objects.create(email="test@example.com")
+        # Should not raise
+        validate_unique_field(TestUniqueModel, "email", "new@example.com")
+
+    # Test: rejects duplicate value
+    def test_validate_unique_field_rejects_duplicate(self):
+        TestUniqueModel.objects.create(email="test@example.com")
+        with self.assertRaises(ValidationError):
+            validate_unique_field(TestUniqueModel, "email", "test@example.com")
+
+    # Test: allows same value for existing instance
+    def test_validate_unique_field_allows_same_for_instance(self):
+        obj = TestUniqueModel.objects.create(email="test@example.com")
+        # Should not raise when checking the same instance
+        validate_unique_field(
+            TestUniqueModel, "email", "test@example.com", instance=obj
+        )
 
 
 class RegexValidatorTests(TestCase):

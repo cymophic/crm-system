@@ -1,0 +1,30 @@
+# Base image for development
+FROM python:3.13-slim-bookworm
+
+# Environment setup
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Create folder and set as working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Copy dependency files for caching
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies (base + dev)
+RUN uv sync --frozen --group dev
+
+# Expose development server port
+EXPOSE 8000
+
+# Run Django development server
+CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

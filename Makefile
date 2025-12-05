@@ -1,7 +1,7 @@
+ENVIRONMENT = $(shell docker-compose ps --services --filter "status=running" | grep -E "^(dev|prod)$$" | head -1)
 MAKEFLAGS += --no-print-directory
 
-.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
-
+.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
 
 # ------------------------------------
 # Setup Commands
@@ -10,7 +10,7 @@ MAKEFLAGS += --no-print-directory
 # Initial setup for development
 setup-dev:
 	@echo Setting up containers...
-	@docker-compose up -d --build
+	@docker-compose --profile dev up -d --build
 	@uv run python -c "print()"
 	@$(MAKE) migrate
 	@uv run python -c "print()"
@@ -27,12 +27,12 @@ setup-dev:
 # Start development environment
 dev:
 	@echo Starting development environment...
-	@docker-compose up -d
+	@docker-compose --profile dev up -d
 
 # Build image before starting dev environment 
 dev-build:
 	@echo Building and starting development environment...
-	@docker-compose up -d --build
+	@docker-compose --profile dev up -d --build
 
 
 # ------------------------------------
@@ -57,7 +57,7 @@ prod-build:
 # Build or updates images
 build:
 	@echo Building Docker images...
-	@docker-compose build
+	@docker-compose --profile $(ENVIRONMENT) build
 
 # Display running containers
 status:
@@ -67,22 +67,38 @@ status:
 # Restart containers
 restart:
 	@echo Restarting containers...
-	@docker-compose restart
+	@docker-compose --profile $(ENVIRONMENT) restart
 
 # Stop and remove containers (preserves data)
 down:
 	@echo Stopping and removing containers...
-	@docker-compose down
+	@docker-compose --profile $(ENVIRONMENT) down
 
 # Container CLI access
 bash:
 	@echo Opening container bash shell...
-	@docker-compose exec app bash
+	@docker-compose exec $(ENVIRONMENT) bash
+
+# Remove generated files and caches (keeps containers)
+clean:
+	@echo Removing Python cache files...
+	@uv run python -c "import os, shutil, glob; [shutil.rmtree(d) for d in glob.glob('**/__pycache__', recursive=True) if os.path.isdir(d)]"
+	@echo Removing .pyc files...
+	@uv run python -c "import os, glob; [os.remove(f) for f in glob.glob('**/*.pyc', recursive=True) if os.path.isfile(f)]"
+	@echo Removing pytest cache...
+	@uv run python -c "import shutil; shutil.rmtree('.pytest_cache', ignore_errors=True)"
+	@echo Removing .egg-info directories...
+	@uv run python -c "import os, shutil, glob; [shutil.rmtree(d) for d in glob.glob('**/*.egg-info', recursive=True) if os.path.isdir(d)]"
+	@echo Removing macOS Finder files...
+	@uv run python -c "import os, glob; [os.remove(f) for f in glob.glob('**/.DS_Store', recursive=True) if os.path.isfile(f)]"
+	@echo Removing Thumbs.db files...
+	@uv run python -c "import os, glob; [os.remove(f) for f in glob.glob('**/Thumbs.db', recursive=True) if os.path.isfile(f)]"
+	@echo Clean complete!
 
 # Removes everything (WARNING: deletes data)
 reset:
 	@echo Removing ALL containers and volumes...
-	@docker-compose down -v
+	@docker-compose --profile dev --profile prod down -v
 	@echo Removing SQLite database...
 	@uv run python -c "import os; os.remove('db.sqlite3') if os.path.exists('db.sqlite3') else None"
 	@echo Removing logs folder...
@@ -91,7 +107,7 @@ reset:
 	@uv run python -c "import shutil, os; shutil.rmtree('media') if os.path.exists('media') else None"
 	@echo Removing staticfiles folder...
 	@uv run python -c "import shutil, os; shutil.rmtree('staticfiles') if os.path.exists('staticfiles') else None"
-	@echo Reset complete...
+	@echo Reset complete!
 
 # ------------------------------------
 # Application Management
@@ -100,42 +116,42 @@ reset:
 # Django shell CLI
 shell:
 	@echo Opening Django shell...
-	@docker-compose exec app uv run python manage.py shell
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py shell
 
 # Collect static files for deployment
 collectstatic:
 	@echo Collecting static files...
-	@docker-compose exec app uv run python manage.py collectstatic --noinput
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py collectstatic --noinput
 
 # Create a Django superuser account
 superuser:
 	@echo Creating Django superuser...
-	@docker-compose exec app uv run python manage.py createsuperuser
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py createsuperuser
 
 # Apply database migrations to the database
 migrate:
 	@echo Running database migrations...
-	@docker-compose exec app uv run python manage.py migrate
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py migrate
 
 # Create new Django database migrations
 migrations:
 	@echo Creating new migrations...
-	@docker-compose exec app uv run python manage.py makemigrations
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py makemigrations
 
 # Show pending migrations
 showmigrations:
 	@echo Showing migration status...
-	@docker-compose exec app uv run python manage.py showmigrations
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py showmigrations
 
 # Check for project issues
 check:
 	@echo Checking for project issues...
-	@docker-compose exec app uv run python manage.py check
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py check
 
 # Run the project test suite
 test:
 	@echo Running test suite...
-	@docker-compose exec app uv run python manage.py test
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py test
 
 # ------------------------------------
 # Log Management
@@ -143,20 +159,20 @@ test:
 
 # Display all services output logs
 service-logs:
-	@uv run python -c "print('Streaming service logs (Ctrl+C to exit)...')"
-	-@docker-compose logs -f
+	@uv run python -c "'Streaming service logs (Ctrl+C to exit)...'"
+	-@docker-compose logs $(ENVIRONMENT) -f
 
 # View application logs (from logs/app.log)
 app-logs:
 	@uv run python -c "print('Streaming application logs (Ctrl+C to exit)...')"
-	@docker-compose exec app tail -f logs/app.log
+	@docker-compose exec $(ENVIRONMENT) tail -f logs/app.log
 
 # View error logs (from logs/errors.log)
 error-logs:
 	@uv run python -c "print('Streaming error logs (Ctrl+C to exit)...')"
-	@docker-compose exec app tail -f logs/errors.log
+	@docker-compose exec $(ENVIRONMENT) tail -f logs/errors.log
 
 # View Django logs (from logs/django.log)
 django-logs:
 	@uv run python -c "print('Streaming Django logs (Ctrl+C to exit)...')"
-	@docker-compose exec app tail -f logs/django.log
+	@docker-compose exec $(ENVIRONMENT) tail -f logs/django.log
