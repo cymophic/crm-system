@@ -81,47 +81,128 @@ cp .env.example .env
 make setup-dev
 ```
 
-### Configuration
+### Installation
 
-Edit `.env` with your settings. The `ENVIRONMENT` variable determines which Docker setup runs:
+1. **Clone the repository:**
 
-- **`dev` or `development`**: Uses `Dockerfile.dev`, SQLite (with optional PostgreSQL/Redis support), Django dev server, and mounts code for live reload
-- **`prod` or `production`**: Uses `Dockerfile.prod`, PostgreSQL, Redis, Gunicorn, and bakes code into the image
+   ```bash
+   git clone https://github.com/cymophic/crm-system.git
+   cd crm-system
+   ```
 
-### Key Variables:
+2. **Configure your `.env` file:**
 
-```bash
-# OPTIONS: dev/development or prod/production
-# This controls which Docker Compose profile and Dockerfile are used
-ENVIRONMENT=dev
+   Copy the `.env.example` file to `.env` in your project's root directory:
+   
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Then edit `.env` with your settings. See instructions for each environment variable:
+   
+   ```bash
+   # --- Environment Mode ---
+   # OPTIONS: 'dev' or 'development' | 'prod' or 'production'
+   # This controls which Docker Compose profile and Dockerfile are used
+   ENVIRONMENT=dev
 
-# Security (auto-generated in dev if empty)
-SECRET_KEY=
-ALLOWED_HOSTS=
+   # --- Django Core Settings ---
+   # Generate a new key with CLI command: 
+   # python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+   # DEV: Leave empty to auto-generate | PROD: Required
+   SECRET_KEY=
 
-# Admin panel URL (defaults to 'admin/' in dev)
-ADMIN_URL=
+   # Allowed Hosts: Comma-separated list of hostnames/domains Django can serve.
+   # DEV: Auto-adds localhost/127.0.0.1 | PROD: Required
+   # For production: yourwebsite.com,www.yourwebsite.com
+   ALLOWED_HOSTS=
 
-# Email Configuration (for notifications)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_USE_SSL=False
-EMAIL_HOST_USER=
-EMAIL_HOST_PASSWORD=
+   # --- Admin Configuration ---
+   # Custom admin URL path (security through obscurity)
+   # DEV: Defaults to 'admin/' if empty | PROD: Required
+   ADMIN_URL=
 
-# Development Database (defaults to SQLite)
-DATABASE_DEV=sqlite:///db.sqlite3
+   # --- Email Configuration ---
+   # Hostname of the email provider's SMTP server
+   EMAIL_HOST=smtp.gmail.com
 
-# Production Settings (required in prod)
-POSTGRES_DB=
-POSTGRES_USER=
-POSTGRES_PASSWORD=
-REDIS_URL=redis://localhost:6379/0
-STATIC_ROOT=/var/www/static
-```
+   # Port number for SMTP connection (587 for TLS, 465 for SSL)
+   EMAIL_PORT=587
+   EMAIL_USE_TLS=True
+   EMAIL_USE_SSL=False
 
-See `.env.example` for complete configuration details.
+   # The full email address used to send emails
+   EMAIL_HOST_USER=your_email@gmail.com
+
+   # Secure app password (not your main account password)
+   # For Gmail: https://support.google.com/accounts/answer/185833
+   EMAIL_HOST_PASSWORD=your_app_password_here
+
+   # --- Email Recipients ---
+   # Comma-separated list of helpdesk email addresses
+   EMAIL_HELPDESK=helpdesk@yourdomain.com,help@example.com
+
+   # Comma-separated list of admin email addresses
+   EMAIL_ADMIN=admin@yourdomain.com,admin@example.com
+
+   # --- Development Database ---
+   # Local Development Database: Uses SQLite3 (no setup required)
+   # Leave empty to use default: sqlite:///db.sqlite3
+   DATABASE_DEV=sqlite:///db.sqlite3
+
+   # --- Production Settings (required in prod) ---
+   # PostgreSQL Credentials: Get these from your hosting provider
+   POSTGRES_DB=your_database_name
+   POSTGRES_USER=your_database_user
+   POSTGRES_PASSWORD=your_database_password
+
+   # Redis connection URL for production caching
+   # Format: redis://HOST:PORT/DB_NUMBER
+   # Example: redis://localhost:6379/0
+   REDIS_URL=redis://localhost:6379/0
+
+   # Directory where static files are collected for production
+   # Absolute path (e.g., /var/www/static)
+   STATIC_ROOT=/var/www/static
+
+   # Comma-separated list of admin email addresses for error notifications
+   # Format: name@domain.com,another@domain.com
+   ADMINS=admin@yourdomain.com
+
+   # Comma-separated list of trusted origins for CSRF protection
+   # Format: https://example.com,https://www.example.com
+   CSRF_TRUSTED_ORIGINS=https://yourwebsite.com,https://www.yourwebsite.com
+   ```
+
+3. **Run initial setup:**
+
+   This command creates containers, applies database migrations, and creates a superuser:
+   
+   ```bash
+   make setup-dev
+   ```
+   
+   Follow the prompts to set up your admin credentials (username, email, password).
+
+### Running the Application
+
+- **Start the development environment:**
+
+  Navigate to the project root in your terminal and run:
+  
+  ```bash
+  make dev
+  ```
+  
+  *(This starts the Django development server with live code reload. You can access the application at `http://127.0.0.1:8000/` or `http://localhost:8000/` in your browser. The Django Admin panel will be at `http://127.0.0.1:8000/admin/` (or your custom `ADMIN_URL` if set).)*
+
+- **Start the production environment:**
+
+  ```bash
+  make prod
+  ```
+  
+  *(This starts the production setup with PostgreSQL, Redis, and Gunicorn.)*
 
 ---
 
