@@ -13,10 +13,11 @@ endif
 
 # Initial setup for development
 setup-dev:
-	@echo Setting up containers...
+	@echo Setting up dev containers...
 	@docker-compose --profile dev up -d --build
 	@uv run python -c "print()"
 	@$(MAKE) migrate
+	@$(MAKE) restart
 	@uv run python -c "print()"
 	@$(MAKE) superuser
 	@echo Development setup complete!
