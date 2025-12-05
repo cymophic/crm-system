@@ -1,7 +1,7 @@
 ENVIRONMENT = $(shell docker-compose ps --services --filter "status=running" | grep -E "^(dev|prod)$$" | head -1)
 MAKEFLAGS += --no-print-directory
 
-.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
+.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test manage.py service-logs app-logs error-logs django-logs
 
 # ------------------------------------
 # Setup Commands
@@ -152,6 +152,10 @@ check:
 test:
 	@echo Running test suite...
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py test
+
+# Run custom manage.py command
+manage.py:
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py $(cmd)
 
 # ------------------------------------
 # Log Management
