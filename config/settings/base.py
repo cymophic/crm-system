@@ -16,7 +16,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
-        "script-src": [SELF, "'unsafe-inline'", "'unsafe-eval'",],
+        "script-src": [
+            SELF,
+            "'unsafe-inline'",
+            "'unsafe-eval'",
+        ],
         "style-src": [SELF, "'unsafe-inline'"],
         "img-src": [SELF, "data:"],
         "font-src": [SELF],
@@ -38,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Project Apps
     "apps.common",
+    "apps.security",
     "apps.users",
     # Third-party Packages
     "unfold",
