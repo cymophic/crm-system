@@ -22,7 +22,7 @@ setup-dev:
 	@$(MAKE) superuser
 	@echo Development setup complete!
 	@uv run python -c "print()"
-	@$(MAKE) service-logs
+	@$(MAKE) service-logs lines=10
 
 
 # ------------------------------------
