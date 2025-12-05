@@ -159,20 +159,20 @@ test:
 
 # Display all services output logs
 service-logs:
-	@uv run python -c "'Streaming service logs (Ctrl+C to exit)...'"
-	-@docker-compose logs $(ENVIRONMENT)
+	@echo Showing last $(or $(lines),20) lines of service logs...
+	@docker-compose logs $(ENVIRONMENT) --tail=$(or $(lines),20)
 
 # View application logs (from logs/app.log)
 app-logs:
-	@uv run python -c "print('Streaming application logs (Ctrl+C to exit)...')"
-	@docker-compose exec $(ENVIRONMENT) tail logs/app.log
+	@echo Showing last $(or $(lines),20) lines of application logs...
+	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/app.log
 
 # View error logs (from logs/errors.log)
 error-logs:
-	@uv run python -c "print('Streaming error logs (Ctrl+C to exit)...')"
-	@docker-compose exec $(ENVIRONMENT) tail logs/errors.log
+	@echo Showing last $(or $(lines),20) lines of error logs...
+	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/errors.log
 
 # View Django logs (from logs/django.log)
 django-logs:
-	@uv run python -c "print('Streaming Django logs (Ctrl+C to exit)...')"
-	@docker-compose exec $(ENVIRONMENT) tail logs/django.log
+	@echo Showing last $(or $(lines),20) lines of Django logs...
+	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/django.log
