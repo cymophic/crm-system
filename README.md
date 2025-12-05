@@ -88,7 +88,7 @@ Edit `.env` with your settings. The `ENVIRONMENT` variable determines which Dock
 - **`dev` or `development`**: Uses `Dockerfile.dev`, SQLite (with optional PostgreSQL/Redis support), Django dev server, and mounts code for live reload
 - **`prod` or `production`**: Uses `Dockerfile.prod`, PostgreSQL, Redis, Gunicorn, and bakes code into the image
 
-Key Variables:
+### Key Variables:
 
 ```bash
 # OPTIONS: dev/development or prod/production
@@ -106,6 +106,7 @@ ADMIN_URL=
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USE_TLS=True
+EMAIL_USE_SSL=False
 EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
 
