@@ -186,23 +186,30 @@ make setup-dev
 
 ### Running the Application
 
-- **Start the development environment:**
+- **Development environment:**
 
-  Navigate to the project root in your terminal and run:
+   After running `make setup-dev`, your containers are already running. To restart them later:
+   ```bash
+   make dev
+    ```
   
-  ```bash
-  make dev
-  ```
-  
-  *(This starts the Django development server with live code reload. You can access the application at `http://127.0.0.1:8000/` or `http://localhost:8000/` in your browser. The Django Admin panel will be at `http://127.0.0.1:8000/admin/` (or your custom `ADMIN_URL` if set).)*
+  *(Access the application at `http://127.0.0.1:8000/` or `http://localhost:8000/`. The Django Admin panel is at `http://127.0.0.1:8000/admin/` (or your custom `ADMIN_URL` if set).)*
 
-- **Start the production environment:**
+- **Production environment:**
 
-  ```bash
-  make prod
-  ```
+   First, update your `.env` file:
+   ```bash
+   ENVIRONMENT=prod
+   ```
+
+   Then configure all required production variables: `SECRET_KEY`, `ALLOWED_HOSTS`, `ADMIN_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `REDIS_URL`, `STATIC_ROOT`, `CSRF_TRUSTED_ORIGINS`.
   
-  *(This starts the production setup with PostgreSQL, Redis, and Gunicorn.)*
+   Finally, start production:
+   ```bash
+   make prod-build
+   ```
+
+  *(This builds production images with PostgreSQL, Redis, and Gunicorn.)*
 
 ---
 
