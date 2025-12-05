@@ -31,7 +31,7 @@ crm-system/
 │   ├── common/                   # Shared utilities across all apps
 │   ├── security/                 # Authentication and security
 │   └── users/                    # User management and authentication
-├── config/                        # Django project settings
+├── config/                       # Django project settings
 │   ├── formats/                  # Custom date/time formats by locale
 │   ├── settings/                 # Split settings (base, dev, prod)
 │   ├── asgi.py
@@ -43,16 +43,16 @@ crm-system/
 │   └── errors.log                # Error-only logs
 ├── media/                        # User-uploaded files
 ├── static/                       # Project-wide static files
-├── staticfiles/                   # Collected static files for production
+├── staticfiles/                  # Collected static files for production
 ├── templates/                    # Project-wide HTML templates
 ├── .dockerignore
 ├── .env                          # Environment variables (ignored by Git)
 ├── .env.example                  # Environment variables template
 ├── .gitignore
 ├── docker-compose.yml            # Docker services configuration
-├── Dockerfile.dev                 # Development Docker configuration
-├── Dockerfile.prod                # Production Docker configuration
-├── Makefile                       # Custom project commands
+├── Dockerfile.dev                # Development Docker configuration
+├── Dockerfile.prod               # Production Docker configuration
+├── Makefile                      # Custom project commands
 ├── manage.py                     # Django management script
 ├── pyproject.toml                # Python dependencies
 ├── README.md
