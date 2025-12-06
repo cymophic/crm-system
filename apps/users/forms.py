@@ -1,15 +1,10 @@
 from django import forms
 from django.urls import reverse
 
-from apps.common.validators import (
-    username_validator,
-)
-
+from apps.common.validators import username_validator
 from apps.users.models import User
-from apps.users.validators import (
-    validate_unique_email,
-    validate_unique_username,
-)
+from apps.users.validators import validate_unique_email, validate_unique_username
+
 
 class UserAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -27,10 +22,12 @@ class UserAdminForm(forms.ModelForm):
                 self.fields["email"].help_text = (
                     f'You can change the password of this user using <a href="{url}" style="color: #2563eb; text-decoration: underline;">this form</a>.'
                 )
-                
+
         if "phone" in self.fields:
-            self.fields["phone"].error_messages["invalid"] = "Use the local format (e.g., 09XX XXX XXXX) or include the country code (e.g., +63 XXX XXX XXXX)"
-            
+            self.fields["phone"].error_messages[
+                "invalid"
+            ] = "Use the local format (e.g., 09XX XXX XXXX) or include the country code (e.g., +63 XXX XXX XXXX)"
+
     def clean_email(self):
         email = self.cleaned_data.get("email")
         validate_unique_email(email, self.instance)
@@ -59,3 +56,7 @@ class UserAdminForm(forms.ModelForm):
             "last_login",
             "date_joined",
         ]
+        labels = {
+            "date_joined": "Date Joined",
+            "last_login": "Last Login",
+        }
