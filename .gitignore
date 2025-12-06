@@ -12,6 +12,9 @@ media/
 staticfiles/
 collected_static/
 
+# Tailwind CLI
+.django_tailwind_cli/
+
 # Database
 *.sqlite3
 *.sqlite3-journal
