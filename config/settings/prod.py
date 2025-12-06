@@ -49,20 +49,21 @@ CONTENT_SECURITY_POLICY["DIRECTIVES"] = CONTENT_SECURITY_POLICY["DIRECTIVES"].co
 # ------------------------------------
 # Admin
 # ------------------------------------
-ADMIN_URL = config("ADMIN_URL")
 ADMINS = config("ADMINS", default="", cast=Csv())
 
 # ------------------------------------
 # Database
 # ------------------------------------
 
-# Credentials 
+# Credentials
 POSTGRES_DB = config("POSTGRES_DB")
 POSTGRES_USER = config("POSTGRES_USER")
 POSTGRES_PASSWORD = config("POSTGRES_PASSWORD")
 
 # Build Connection URL
-DATABASE_PROD = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db:5432/{POSTGRES_DB}"
+DATABASE_PROD = (
+    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db:5432/{POSTGRES_DB}"
+)
 
 # Parse and configure database
 DATABASES = {"default": dj_database_url.parse(DATABASE_PROD, conn_max_age=600)}

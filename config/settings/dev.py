@@ -31,11 +31,6 @@ CONTENT_SECURITY_POLICY = CONTENT_SECURITY_POLICY.copy()
 CONTENT_SECURITY_POLICY["DIRECTIVES"] = CONTENT_SECURITY_POLICY["DIRECTIVES"].copy()
 
 # ------------------------------------
-# Admin
-# ------------------------------------
-ADMIN_URL = config("ADMIN_URL", default="admin/") or "admin/"
-
-# ------------------------------------
 # Database
 # ------------------------------------
 DATABASE_DEV = (

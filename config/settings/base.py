@@ -30,6 +30,13 @@ CONTENT_SECURITY_POLICY = {
 }
 
 # ------------------------------------
+# Admin
+# ------------------------------------
+ADMIN_URL = config("ADMIN_URL", default="admin/") or "admin/"
+if not ADMIN_URL.endswith("/"):
+    ADMIN_URL += "/"
+
+# ------------------------------------
 # Database
 # ------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
