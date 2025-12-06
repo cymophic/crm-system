@@ -14,6 +14,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 
 ## ⚙️ Technologies Used
 
+- **Frontend:** Tailwind CSS 4.x
 - **Backend:** Django 5.2.8+ (Python 3.13)
 - **Database:** SQLite3 (dev) / PostgreSQL (prod)
 - **Cache:** Local Memory Cache (dev) / Redis (prod)
@@ -43,7 +44,11 @@ crm-system/
 │   └── errors.log                # Error-only logs
 ├── media/                        # User-uploaded files
 ├── static/                       # Project-wide static files
+│   └── css
+│       └── output.css            # Compiled Tailwind CSS
 ├── staticfiles/                  # Collected static files for production
+├── tailwind/                     # Tailwind CSS configuration
+│   └── input.css                 # Tailwind source CSS
 ├── templates/                    # Project-wide HTML templates
 ├── .dockerignore
 ├── .env                          # Environment variables (ignored by Git)
@@ -243,6 +248,7 @@ make superuser                # Create Django superuser
 make collectstatic            # Collect static files
 make check                    # Check for project issues
 make test                     # Run test suite
+make tailwind-build           # Build minified CSS for production
 make manage.py cmd="..."      # Run custom manage.py command
 ```
 
