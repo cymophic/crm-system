@@ -5,6 +5,11 @@ from django.contrib.auth.models import Group
 from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm, UserCreationForm
 
+from apps.users.filters import (
+    ActiveStatusFilter,
+    StaffStatusFilter,
+    SuperuserStatusFilter,
+)
 from apps.users.forms import UserAdminForm
 from apps.users.models import User
 
@@ -38,7 +43,12 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     search_fields = ["username", "email", "first_name", "last_name"]
     readonly_fields = ["date_joined", "last_login"]
     ordering = ["-date_joined"]
-    list_filter = ["is_staff", "is_superuser", "is_active", "groups"]
+    list_filter = [
+        ActiveStatusFilter,
+        StaffStatusFilter,
+        SuperuserStatusFilter,
+        "groups",
+    ]
     list_display = ["full_name", "username", "job_title", "date_joined_display"]
     fieldsets = (
         ("Account", {"fields": ("email", "username")}),
