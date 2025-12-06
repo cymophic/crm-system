@@ -29,6 +29,13 @@ class User(AbstractUser):
     last_name = models.CharField(verbose_name="Last Name", max_length=150)
     username = models.CharField(verbose_name="Username", max_length=50, unique=True)
     email = models.EmailField(verbose_name="Email Address", unique=True)
+    groups = models.ManyToManyField(
+        "auth.Group",
+        verbose_name="Groups",
+        blank=True,
+        related_name="user_set",
+        related_query_name="user",
+    )
 
     # Custom fields
     job_title = models.CharField(verbose_name="Job Title", max_length=200)
