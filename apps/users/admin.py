@@ -107,7 +107,7 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         ),
     )
 
-    @admin.display(description="Full name", empty_value="-")
+    @admin.display(description="Full Name", empty_value="-")
     def full_name(self, obj):
         # Returns the user's full name
         name = f"{obj.first_name} {obj.last_name}".strip()
