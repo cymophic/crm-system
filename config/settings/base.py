@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "apps.users",
     # Third-party Packages
     "unfold",
+    "django_tailwind_cli",
     "phonenumber_field",
     "djmoney",
     # Core Django Apps
@@ -340,3 +341,8 @@ UNFOLD = {
         ],
     },
 }
+
+# ------------------------------------
+# Django Tailwind CLI Configuration
+# ------------------------------------
+TAILWIND_CLI_ARGS = "--minify"
