@@ -162,8 +162,8 @@ make setup-dev
    REDIS_URL=redis://localhost:6379/0
 
    # Directory where static files are collected for production
-   # Absolute path (e.g., /var/www/static)
-   STATIC_ROOT=/var/www/static
+   # Absolute path (e.g., /app/staticfiles)
+   STATIC_ROOT=/app/staticfiles
 
    # Comma-separated list of admin email addresses for error notifications
    # Format: name@domain.com,another@domain.com
@@ -188,12 +188,10 @@ make setup-dev
 
 - **Development environment:**
 
-   After running `make setup-dev`, your containers are already running. To restart them later:
+   After running `make setup-dev`, your containers are already running. To start them next time:
    ```bash
    make dev
     ```
-  
-  *(Access the application at `http://127.0.0.1:8000/` or `http://localhost:8000/`. The Django Admin panel is at `http://127.0.0.1:8000/admin/` (or your custom `ADMIN_URL` if set).)*
 
 - **Production environment:**
 
@@ -206,10 +204,8 @@ make setup-dev
   
    Finally, start production:
    ```bash
-   make prod-build
+   make prod
    ```
-
-  *(This builds production images with PostgreSQL, Redis, and Gunicorn.)*
 
 ---
 
@@ -262,11 +258,10 @@ make reset                    # Remove ALL containers, volumes, and data
 
 ### Logs
 ```bash
-make service-logs             # Show last 20 lines of service logs
-make service-logs lines=50    # Show last 50 lines
-make app-logs                 # View application logs
-make error-logs               # View error logs
-make django-logs              # View Django logs
+make service-logs             # Show service logs
+make app-logs                 # Show application logs
+make error-logs               # Show error logs
+make django-logs              # Show Django logs
 ```
 
 ---
