@@ -14,12 +14,14 @@ setup-dev:
 	@docker-compose --profile dev up -d --build
 	@uv run python -c "print()"
 	@$(MAKE) migrate
+	@uv run python -c "print()"
 	@$(MAKE) restart
 	@uv run python -c "print()"
 	@$(MAKE) superuser
-	@echo Development setup complete!
 	@uv run python -c "print()"
-	@$(MAKE) service-logs lines=10
+	@$(MAKE) service-logs lines=13
+	@uv run python -c "print()"
+	@echo Development environment setup complete!
 
 
 # ------------------------------------
