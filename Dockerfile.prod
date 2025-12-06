@@ -20,6 +20,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 # Copy dependency files for caching
 COPY pyproject.toml uv.lock ./
 
+# Build minified Tailwind CSS for production
+RUN uv run python manage.py tailwind build
+
 # Install dependencies (base + prod)
 RUN uv sync --frozen --group prod
 

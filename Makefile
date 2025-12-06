@@ -158,7 +158,7 @@ test:
 # Build minified CSS for production
 tailwind-build:
 	@echo Building Tailwind CSS...
-	@docker-compose exec $(ENVIRONMENT) uv run python manage.py tailwind build
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py tailwind build --force
 
 # Run custom manage.py command
 manage.py:
