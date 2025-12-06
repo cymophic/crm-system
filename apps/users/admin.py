@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group as BaseGroup
 from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm, UserCreationForm
 
@@ -11,11 +11,11 @@ from apps.users.filters import (
     SuperuserStatusFilter,
 )
 from apps.users.forms import UserAdminForm
-from apps.users.models import User
+from apps.users.models import Group, User
 
 # List of built-in models for unregistration
 MODELS = [
-    Group,
+    BaseGroup,
 ]
 
 # Unregister all models listed
@@ -30,8 +30,9 @@ for model in MODELS:
 @admin.register(Group)
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
     search_fields = ["name"]
-    ordering = ["name"]
-    list_display = ["name"]
+    ordering = ["order", "name"]
+    list_display = ["name", "order"]
+    fields = ["name", "order", "permissions"]
 
 
 # User Model

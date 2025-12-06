@@ -318,7 +318,7 @@ UNFOLD = {
                         "permission": lambda request: request.user.is_authenticated,
                     },
                     {
-                        "link": reverse_lazy("admin:auth_group_changelist"),
+                        "link": reverse_lazy("admin:users_group_changelist"),
                         "title": _("Groups"),
                         "icon": "admin_panel_settings",
                         "permission": lambda request: request.user.is_authenticated,
