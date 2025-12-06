@@ -33,7 +33,7 @@ crm-system/
 │   ├── security/                 # Authentication and security
 │   └── users/                    # User management and authentication
 ├── config/                       # Django project settings
-│   ├── formats/                  # Custom date/time formats by locale
+│   ├── formats/                  # Custom date/time/number formats by locale
 │   ├── settings/                 # Split settings (base, dev, prod)
 │   ├── asgi.py
 │   ├── urls.py
