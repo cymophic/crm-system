@@ -20,12 +20,14 @@ for model in MODELS:
     except admin.sites.NotRegistered:
         pass
 
+
 # Group Model
 @admin.register(Group)
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
     search_fields = ["name"]
     ordering = ["name"]
     list_display = ["name"]
+
 
 # User Model
 @admin.register(User)
@@ -37,7 +39,7 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     readonly_fields = ["date_joined", "last_login"]
     ordering = ["-date_joined"]
     list_filter = ["is_staff", "is_superuser", "is_active", "groups"]
-    list_display = ["full_name", "username", "job_title", "date_joined"]
+    list_display = ["full_name", "username", "job_title", "date_joined_display"]
     fieldsets = (
         ("Account", {"fields": ("email", "username")}),
         (
@@ -100,3 +102,10 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         name = f"{obj.first_name} {obj.last_name}".strip()
         return name if name else None
 
+    @admin.display(description="Date Joined")
+    def date_joined_display(self, obj):
+        return obj.date_joined
+
+    @admin.display(description="Last Login")
+    def last_login_display(self, obj):
+        return obj.last_login
