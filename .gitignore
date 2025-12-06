@@ -12,8 +12,8 @@ media/
 staticfiles/
 collected_static/
 
-# Tailwind CLI
-.django_tailwind_cli/
+# Tailwind CLI Binary File
+tailwind/tailwindcss*
 
 # Database
 *.sqlite3
