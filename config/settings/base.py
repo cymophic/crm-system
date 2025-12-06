@@ -159,7 +159,7 @@ FORMAT_MODULE_PATH = [
 ]
 
 # Phone Numbers
-PHONENUMBER_DEFAULT_REGION = "PH"  # django-phonenumber-field
+PHONENUMBER_DEFAULT_REGION = None  # django-phonenumber-field
 
 # Currency
 CURRENCIES = ("PHP", "USD")  # django-money
