@@ -59,4 +59,6 @@ class UserAdminForm(forms.ModelForm):
         labels = {
             "date_joined": "Date Joined",
             "last_login": "Last Login",
+            "is_staff": "Staff Status",
+            "is_superuser": "Superuser Status",
         }
