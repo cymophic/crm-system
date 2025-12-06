@@ -50,6 +50,7 @@ class UserAdminForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
+            "phone",
             "groups",
             "user_permissions",
             "is_active",
