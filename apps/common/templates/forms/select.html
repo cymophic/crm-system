@@ -1,0 +1,73 @@
+<!-- Reusable Component: Select Dropdown -->
+
+<div class="flex flex-col group {{ margin_class }} {% if col_span == '2' %}lg:col-span-2{% elif col_span == '3' %}lg:col-span-3{% endif %}">
+    <div class="flex flex-col gap-2">
+        <!-- Label -->
+        <label for="{{ id }}" class="block font-semibold text-sm text-(--text-title)">
+            {{ label }}
+            {% if required %}
+                <span class="text-(--color-important)">
+                    *
+                </span>
+            {% endif %}
+        </label>
+
+        <!-- Options -->
+        <div class="relative">
+            <select
+                name="{{ name }}"
+                id="{{ id }}"
+                {% if required %}
+                    required
+                {% endif %}
+                {% if tabindex %}
+                    tabindex="{{ tabindex }}"
+                {% endif %}
+                {% if disabled %}
+                    disabled
+                {% endif %}
+                class="appearance-none border font-medium min-w-20 px-3 py-2 pr-10 w-full rounded shadow-xs text-sm focus:outline-2 focus:-outline-offset-2
+                       {% if disabled %}
+                           text-(--text-muted) bg-(--bg-subtle) border-(--border-default) cursor-not-allowed
+                       {% elif has_error %}
+                           border-(--input-border-error) bg-(--input-bg-error) text-(--text-body)
+                       {% else %}
+                           border-(--border-default) bg-(--bg-surface) text-(--text-body) focus:outline-(--color-accent)
+                       {% endif %}"
+            >
+                {% if queryset %}
+                    {% for obj in queryset %}
+                        <option value="{{ obj.pk }}" {% if obj.pk == value or obj.pk|stringformat:"s" == value|stringformat:"s" %}selected{% endif %}
+                        >
+                            {{ obj }}
+                        </option>
+                    {% endfor %}
+                {% else %}
+                    {{ options|safe }}
+                {% endif %}
+            </select>
+            <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-lg! pointer-events-none
+                         {% if disabled %}
+                             text-(--text-muted)
+                         {% else %}
+                             text-(--text-body)
+                         {% endif %}">
+                expand_more
+            </span>
+        </div>
+
+        <!-- Error Messages -->
+        {% if error_message %}
+            <span class="text-(--text-error) text-xs">
+                {{ error_message }}
+            </span>
+        {% endif %}
+
+        <!-- Help Texts -->
+        {% if help_text and not error_message %}
+            <span class="text-(--text-muted) text-xs">
+                {{ help_text|safe }}
+            </span>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<!-- Reusable Component: Checkbox Field -->
+
+<div class="flex flex-col group {{ margin_class }} {% if col_span == '2' %}lg:col-span-2{% elif col_span == '3' %}lg:col-span-3{% endif %}">
+    <div class="flex items-start gap-3">
+        <!-- Checkbox Input -->
+        <input
+            type="checkbox"
+            name="{{ name }}"
+            id="{{ id }}"
+            {% if value %}
+                value="{{ value }}"
+            {% endif %}
+            {% if checked %}
+                checked
+            {% endif %}
+            {% if required %}
+                required
+            {% endif %}
+            {% if tabindex %}
+                tabindex="{{ tabindex }}"
+            {% endif %}
+            class="mt-0.5 h-4 w-4 text-(--color-accent) focus:ring-(--color-accent) rounded
+                   {% if has_error %}
+                       border-(--input-border-error)
+                   {% else %}
+                       border-(--border-strong)
+                   {% endif %}"
+        >
+
+        <!-- Label and Help Text -->
+        <div class="flex flex-col gap-1">
+            <label for="{{ id }}" class="block text-sm text-(--text-title) cursor-pointer">
+                {{ label }}
+                {% if required %}
+                    <span class="text-(--color-important)">
+                        *
+                    </span>
+                {% endif %}
+            </label>
+
+            <!-- Error Message -->
+            {% if error_message %}
+                <span class="text-(--text-error) text-xs">
+                    {{ error_message }}
+                </span>
+            {% endif %}
+
+            <!-- Help Text -->
+            {% if help_text and not error_message %}
+                <span class="text-(--text-muted) text-xs">
+                    {{ help_text|safe }}
+                </span>
+            {% endif %}
+        </div>
+    </div>
+</div>

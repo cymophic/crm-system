@@ -1,0 +1,15 @@
+<!-- Reusable Component: Text with Button -->
+
+<div class="mt-6 text-center">
+    <p class="text-sm text-(--text-title)">
+        {{ text }}
+        <button
+            {% if id %}id="{{ id }}"{% endif %}
+            type="{{ button_type|default:'submit' }}"
+            class="text-(--color-accent) hover:underline font-medium cursor-pointer"
+            {% if confirm %}onclick="return confirm('{{ confirm_text|default:'Are you sure?' }}')"{% endif %}
+        >
+            {{ button_text }}
+        </button>
+    </p>
+</div>
