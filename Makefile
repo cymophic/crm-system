@@ -11,7 +11,7 @@ export ENVIRONMENT ?= dev
 # Initial setup for development
 setup-dev:
 	@echo Setting up dev containers...
-	@docker-compose --profile dev up -d --build
+	@$(MAKE) dev-build
 	@uv run python -c "print()"
 	@$(MAKE) migrate
 	@uv run python -c "print()"
@@ -22,6 +22,25 @@ setup-dev:
 	@$(MAKE) service-logs lines=13
 	@uv run python -c "print()"
 	@echo Development environment setup complete!
+
+# Initial production environment
+setup-prod:
+	@echo Setting up production environment...
+	@$(MAKE) prod-build
+	@uv run python -c "print()"
+	@$(MAKE) migrate
+	@uv run python -c "print()"
+	@$(MAKE) tailwind-build
+	@uv run python -c "print()"
+	@$(MAKE) collectstatic
+	@uv run python -c "print()"
+	@$(MAKE) restart
+	@uv run python -c "print()"
+	@$(MAKE) superuser
+	@uv run python -c "print()"
+	@$(MAKE) service-logs
+	@uv run python -c "print()"
+	@echo Production setup complete!
 
 
 # ------------------------------------
