@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 -include .env
 export ENVIRONMENT ?= dev
 
-.PHONY: setup-dev setup-prod dev dev-build prod prod-build build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test tailwind-build manage.py service-logs app-logs error-logs django-logs
+.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test tailwind-build manage.py service-logs app-logs error-logs django-logs
 
 # ------------------------------------
 # Setup Commands
@@ -72,6 +72,10 @@ prod-build:
 	@echo Building and starting production environment...
 	@docker-compose --profile prod up -d --build
 
+# Check production security configuration
+security-status:
+	@echo Running security configuration checks...
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py check --deploy
 
 # ------------------------------------
 # Container Management
