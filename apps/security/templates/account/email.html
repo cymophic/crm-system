@@ -114,7 +114,7 @@
                             {% include 'buttons/primary.html' with text='Add Email' name='action_add' type='submit' %}
 
                             <!-- Back to Dashboard -->
-                            {% url 'web:index' as index_url %}
+                            {% url 'base:index' as index_url %}
                             {% include 'buttons/secondary_link.html' with text='Back' url=index_url onclick="if (history.length > 1) { history.back(); } else { window.location.href = '{{ index_url }}'; }" %}
                         </div>
 

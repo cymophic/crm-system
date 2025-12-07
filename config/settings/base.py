@@ -45,6 +45,13 @@ if not ADMIN_URL.endswith("/"):
     ADMIN_URL += "/"
 
 # ------------------------------------
+# URLs
+# ------------------------------------
+LOGIN_REDIRECT_URL = reverse_lazy("base:index")
+LOGOUT_REDIRECT_URL = reverse_lazy("base:index")
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("base:index")  # django-allauth
+
+# ------------------------------------
 # Database
 # ------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -56,6 +63,8 @@ INSTALLED_APPS = [
     # Initial Apps
     "django.contrib.sites",
     # Project Apps
+    "apps.base",
+    "apps.analytics",
     "apps.common",
     "apps.security",
     "apps.users",
