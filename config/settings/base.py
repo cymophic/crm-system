@@ -5,6 +5,8 @@ from decouple import Csv, config
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
+from config.constants import SYSTEM_FULL_NAME, SYSTEM_NAME
+
 # ------------------------------------
 # Base Directory
 # ------------------------------------
@@ -131,6 +133,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "config.context_processors.site_constants",  # project-constants
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -188,7 +191,7 @@ EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-DEFAULT_FROM_EMAIL = f"CRM System <{EMAIL_HOST_USER}>"
+DEFAULT_FROM_EMAIL = f"{SYSTEM_NAME} <{EMAIL_HOST_USER}>"
 
 # Email Recipients
 EMAIL_HELPDESK = config("EMAIL_HELPDESK", default="", cast=Csv())
@@ -280,9 +283,9 @@ LOGGING = {
 # Unfold Admin Configuration
 # ------------------------------------
 UNFOLD = {
-    "SITE_TITLE": "CRM Admin",
-    "SITE_HEADER": "CRM Admin",
-    "SITE_SUBHEADER": "Customer Relationship Management System",
+    "SITE_TITLE": f"{SYSTEM_NAME} Admin",
+    "SITE_HEADER": f"{SYSTEM_NAME} Admin",
+    "SITE_SUBHEADER": f"{SYSTEM_FULL_NAME}",
     "THEME": "light",
     "SITE_URL": "/",
     "COLORS": {
