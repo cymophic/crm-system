@@ -1,7 +1,8 @@
-ENVIRONMENT = $(shell docker-compose ps --services --filter "status=running" | grep -E "^(dev|prod)$$" | head -1)
 MAKEFLAGS += --no-print-directory
+-include .env
+export ENVIRONMENT ?= dev
 
-.PHONY: setup-dev dev dev-build prod prod-build build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test service-logs app-logs error-logs django-logs
+.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test tailwind-build manage.py service-logs app-logs error-logs django-logs
 
 # ------------------------------------
 # Setup Commands
@@ -9,15 +10,39 @@ MAKEFLAGS += --no-print-directory
 
 # Initial setup for development
 setup-dev:
-	@echo Setting up containers...
-	@docker-compose --profile dev up -d --build
+	@echo Setting up dev containers...
+	@$(MAKE) dev-build
 	@uv run python -c "print()"
 	@$(MAKE) migrate
 	@uv run python -c "print()"
+	@$(MAKE) restart
+	@uv run python -c "print()"
 	@$(MAKE) superuser
-	@echo Development setup complete!
+	@uv run python -c "print()"
+	@$(MAKE) service-logs lines=13
+	@uv run python -c "print()"
+	@echo Development environment setup complete!
+
+# Initial production environment
+setup-prod:
+	@echo Setting up production environment...
+	@$(MAKE) prod-build
+	@uv run python -c "print()"
+	@$(MAKE) migrate
+	@uv run python -c "print()"
+	@$(MAKE) tailwind-build
+	@uv run python -c "print()"
+	@$(MAKE) collectstatic
+	@uv run python -c "print()"
+	@$(MAKE) restart
+	@uv run python -c "print()"
+	@$(MAKE) superuser
+	@uv run python -c "print()"
+	@$(MAKE) security-status
 	@uv run python -c "print()"
 	@$(MAKE) service-logs
+	@uv run python -c "print()"
+	@echo Production setup complete!
 
 
 # ------------------------------------
@@ -49,6 +74,10 @@ prod-build:
 	@echo Building and starting production environment...
 	@docker-compose --profile prod up -d --build
 
+# Check production security configuration
+security-status:
+	@echo Running security configuration checks...
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py check --deploy
 
 # ------------------------------------
 # Container Management
@@ -62,7 +91,7 @@ build:
 # Display running containers
 status:
 	@echo Checking container status...
-	@docker-compose ps --format "table {{.Service}}\t{{.Name}}\t{{.Status}}"
+	@docker-compose ps --format "table {{.ID}}\t{{.Service}}\t{{.Name}}\t{{.Status}}"
 
 # Restart containers
 restart:
@@ -153,26 +182,35 @@ test:
 	@echo Running test suite...
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py test
 
+# Build minified CSS for production
+tailwind-build:
+	@echo Building Tailwind CSS...
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py tailwind build --force
+
+# Run custom manage.py command
+manage.py:
+	@docker-compose exec $(ENVIRONMENT) uv run python manage.py $(cmd)
+
 # ------------------------------------
 # Log Management
 # ------------------------------------
 
 # Display all services output logs
 service-logs:
-	@uv run python -c "'Streaming service logs (Ctrl+C to exit)...'"
-	-@docker-compose logs $(ENVIRONMENT) -f
+	@echo Showing last $(or $(lines),20) lines of service logs...
+	@docker-compose logs $(ENVIRONMENT) --tail=$(or $(lines),20)
 
 # View application logs (from logs/app.log)
 app-logs:
-	@uv run python -c "print('Streaming application logs (Ctrl+C to exit)...')"
-	@docker-compose exec $(ENVIRONMENT) tail -f logs/app.log
+	@echo Showing last $(or $(lines),20) lines of application logs...
+	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/app.log
 
 # View error logs (from logs/errors.log)
 error-logs:
-	@uv run python -c "print('Streaming error logs (Ctrl+C to exit)...')"
-	@docker-compose exec $(ENVIRONMENT) tail -f logs/errors.log
+	@echo Showing last $(or $(lines),20) lines of error logs...
+	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/errors.log
 
 # View Django logs (from logs/django.log)
 django-logs:
-	@uv run python -c "print('Streaming Django logs (Ctrl+C to exit)...')"
-	@docker-compose exec $(ENVIRONMENT) tail -f logs/django.log
+	@echo Showing last $(or $(lines),20) lines of Django logs...
+	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/django.log

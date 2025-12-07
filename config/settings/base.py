@@ -13,10 +13,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # ------------------------------------
 # Security
 # ------------------------------------
+ENABLE_SSL = config("ENABLE_SSL", default=False, cast=bool) or False
+
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
-        "script-src": [SELF, "'unsafe-inline'", "'unsafe-eval'",],
+        "script-src": [
+            SELF,
+            "'unsafe-inline'",
+            "'unsafe-eval'",
+        ],
         "style-src": [SELF, "'unsafe-inline'"],
         "img-src": [SELF, "data:"],
         "font-src": [SELF],
@@ -24,6 +30,13 @@ CONTENT_SECURITY_POLICY = {
         "frame-ancestors": [NONE],
     },
 }
+
+# ------------------------------------
+# Admin
+# ------------------------------------
+ADMIN_URL = config("ADMIN_URL", default="admin/") or "admin/"
+if not ADMIN_URL.endswith("/"):
+    ADMIN_URL += "/"
 
 # ------------------------------------
 # Database
@@ -38,9 +51,11 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Project Apps
     "apps.common",
+    "apps.security",
     "apps.users",
     # Third-party Packages
     "unfold",
+    "django_tailwind_cli",
     "phonenumber_field",
     "djmoney",
     # Core Django Apps
@@ -148,9 +163,12 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Manila"
 USE_I18N = True
 USE_TZ = True
+FORMAT_MODULE_PATH = [
+    "config.formats",
+]
 
 # Phone Numbers
-PHONENUMBER_DEFAULT_REGION = "PH"  # django-phonenumber-field
+PHONENUMBER_DEFAULT_REGION = None  # django-phonenumber-field
 
 # Currency
 CURRENCIES = ("PHP", "USD")  # django-money
@@ -159,27 +177,6 @@ CURRENCY_CHOICES = [  # django-money
     ("PHP", "₱"),
     ("USD", "$"),
 ]
-
-# Date Formats
-DATE_FORMAT = "M d, Y"  # e.g., Jan 15, 2025
-SHORT_DATE_FORMAT = "m/d/Y"  # e.g., 01/15/2025
-DATE_INPUT_FORMATS = [
-    "%Y-%m-%d",  # 2025-01-15
-    "%m/%d/%Y",  # 01/15/2025
-    "%m/%d/%y",  # 01/15/25
-]
-
-# Time Formats
-TIME_FORMAT = "g:i A"  # e.g., 2:30 PM
-SHORT_TIME_FORMAT = "H:i"  # e.g., 14:30
-DATETIME_FORMAT = "M d, Y g:i A"  # e.g., Jan 15, 2025 2:30 PM
-SHORT_DATETIME_FORMAT = "m/d/Y H:i"  # e.g., 01/15/2025 14:30
-
-# Number Formats
-USE_THOUSAND_SEPARATOR = True
-THOUSAND_SEPARATOR = ","
-DECIMAL_SEPARATOR = "."
-NUMBER_GROUPING = 3
 
 # ------------------------------------
 # Email Configuration
@@ -330,7 +327,7 @@ UNFOLD = {
                         "permission": lambda request: request.user.is_authenticated,
                     },
                     {
-                        "link": reverse_lazy("admin:auth_group_changelist"),
+                        "link": reverse_lazy("admin:users_group_changelist"),
                         "title": _("Groups"),
                         "icon": "admin_panel_settings",
                         "permission": lambda request: request.user.is_authenticated,
@@ -353,3 +350,11 @@ UNFOLD = {
         ],
     },
 }
+
+# ------------------------------------
+# Django Tailwind CLI Configuration
+# ------------------------------------
+TAILWIND_CLI_PATH = "tailwind"
+TAILWIND_CLI_SRC_CSS = BASE_DIR / "tailwind" / "input.css"
+TAILWIND_CLI_DIST_CSS = "css/output.css"
+TAILWIND_CLI_ARGS = "--minify"

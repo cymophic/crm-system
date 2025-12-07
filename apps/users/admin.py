@@ -1,16 +1,21 @@
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group as BaseGroup
 from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm, UserCreationForm
 
+from apps.users.filters import (
+    ActiveStatusFilter,
+    StaffStatusFilter,
+    SuperuserStatusFilter,
+)
 from apps.users.forms import UserAdminForm
-from apps.users.models import User
+from apps.users.models import Group, User
 
 # List of built-in models for unregistration
 MODELS = [
-    Group,
+    BaseGroup,
 ]
 
 # Unregister all models listed
@@ -20,12 +25,15 @@ for model in MODELS:
     except admin.sites.NotRegistered:
         pass
 
+
 # Group Model
 @admin.register(Group)
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
     search_fields = ["name"]
-    ordering = ["name"]
-    list_display = ["name"]
+    ordering = ["order", "name"]
+    list_display = ["name", "order"]
+    fields = ["name", "order", "permissions"]
+
 
 # User Model
 @admin.register(User)
@@ -36,8 +44,13 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     search_fields = ["username", "email", "first_name", "last_name"]
     readonly_fields = ["date_joined", "last_login"]
     ordering = ["-date_joined"]
-    list_filter = ["is_staff", "is_superuser", "is_active", "groups"]
-    list_display = ["full_name", "username", "job_title", "date_joined"]
+    list_filter = [
+        ActiveStatusFilter,
+        StaffStatusFilter,
+        SuperuserStatusFilter,
+        "groups",
+    ]
+    list_display = ["full_name", "username", "job_title", "date_joined_display"]
     fieldsets = (
         ("Account", {"fields": ("email", "username")}),
         (
@@ -94,9 +107,16 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         ),
     )
 
-    @admin.display(description="Full name", empty_value="-")
+    @admin.display(description="Full Name", empty_value="-")
     def full_name(self, obj):
         # Returns the user's full name
         name = f"{obj.first_name} {obj.last_name}".strip()
         return name if name else None
 
+    @admin.display(description="Date Joined")
+    def date_joined_display(self, obj):
+        return obj.date_joined
+
+    @admin.display(description="Last Login")
+    def last_login_display(self, obj):
+        return obj.last_login

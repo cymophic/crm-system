@@ -20,8 +20,8 @@ ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
 ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 
 # Cookie Security
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = ENABLE_SSL
+CSRF_COOKIE_SECURE = ENABLE_SSL
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 
@@ -29,11 +29,6 @@ CSRF_COOKIE_HTTPONLY = True
 CSP_REPORT_ONLY = True
 CONTENT_SECURITY_POLICY = CONTENT_SECURITY_POLICY.copy()
 CONTENT_SECURITY_POLICY["DIRECTIVES"] = CONTENT_SECURITY_POLICY["DIRECTIVES"].copy()
-
-# ------------------------------------
-# Admin
-# ------------------------------------
-ADMIN_URL = config("ADMIN_URL", default="admin/") or "admin/"
 
 # ------------------------------------
 # Database
@@ -54,6 +49,11 @@ CACHES = {
         "LOCATION": "crm-cache",
     }
 }
+
+# ------------------------------------
+# Sessions
+# ------------------------------------
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # ------------------------------------
 # Logging

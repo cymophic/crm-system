@@ -13,6 +13,7 @@ dependencies = [
     "django-money>=3.5.4",
     "django-phonenumber-field[phonenumbers]>=8.4.0",
     "django-redis>=6.0.0",
+    "django-tailwind-cli>=4.4.2",
     "django-unfold>=0.72.0",
     "python-decouple>=3.8",
     "whitenoise>=6.11.0",

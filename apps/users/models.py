@@ -1,14 +1,22 @@
 import logging
 
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import Group as BaseGroup
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.common.validators import numeric_validator
+from apps.common.mixins import OrderingMixin
 
 from .managers import UserManager
 
 logger = logging.getLogger("apps.users")
+
+
+class Group(OrderingMixin, BaseGroup):
+    class Meta:
+        proxy = False
+        ordering = ["order", "name"]
+        verbose_name = "Group"
 
 
 class User(AbstractUser):
@@ -29,12 +37,20 @@ class User(AbstractUser):
     last_name = models.CharField(verbose_name="Last Name", max_length=150)
     username = models.CharField(verbose_name="Username", max_length=50, unique=True)
     email = models.EmailField(verbose_name="Email Address", unique=True)
+    groups = models.ManyToManyField(
+        "users.Group",
+        verbose_name="Groups",
+        blank=True,
+        related_name="user_set",
+        related_query_name="user",
+    )
 
     # Custom fields
     job_title = models.CharField(verbose_name="Job Title", max_length=200)
     phone = PhoneNumberField(verbose_name="Phone Number", blank=True)
 
     class Meta:
+        verbose_name = "User"
         indexes = [
             models.Index(fields=["email"]),
             models.Index(fields=["first_name", "last_name"]),

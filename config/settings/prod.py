@@ -17,18 +17,18 @@ SECRET_KEY = config("SECRET_KEY")
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # SSL Redirect
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = ENABLE_SSL
 
 # Cookie Security
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = ENABLE_SSL
+CSRF_COOKIE_SECURE = ENABLE_SSL
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 
 # HSTS (HTTP Strict Transport Security)
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = 31536000 if ENABLE_SSL else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = ENABLE_SSL
+SECURE_HSTS_PRELOAD = ENABLE_SSL
 
 # Content Security
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -49,20 +49,21 @@ CONTENT_SECURITY_POLICY["DIRECTIVES"] = CONTENT_SECURITY_POLICY["DIRECTIVES"].co
 # ------------------------------------
 # Admin
 # ------------------------------------
-ADMIN_URL = config("ADMIN_URL")
 ADMINS = config("ADMINS", default="", cast=Csv())
 
 # ------------------------------------
 # Database
 # ------------------------------------
 
-# Credentials 
+# Credentials
 POSTGRES_DB = config("POSTGRES_DB")
 POSTGRES_USER = config("POSTGRES_USER")
 POSTGRES_PASSWORD = config("POSTGRES_PASSWORD")
 
 # Build Connection URL
-DATABASE_PROD = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db:5432/{POSTGRES_DB}"
+DATABASE_PROD = (
+    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db:5432/{POSTGRES_DB}"
+)
 
 # Parse and configure database
 DATABASES = {"default": dj_database_url.parse(DATABASE_PROD, conn_max_age=600)}
@@ -79,13 +80,11 @@ CACHES = {
     }
 }
 
+# ------------------------------------
+# Sessions
+# ------------------------------------
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
-
-# ------------------------------------
-# Static & Media Files
-# ------------------------------------
-STATIC_ROOT = config("STATIC_ROOT")
 
 # ------------------------------------
 # Logging
