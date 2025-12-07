@@ -17,18 +17,18 @@ SECRET_KEY = config("SECRET_KEY")
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # SSL Redirect
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = ENABLE_SSL
 
 # Cookie Security
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = ENABLE_SSL
+CSRF_COOKIE_SECURE = ENABLE_SSL
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 
 # HSTS (HTTP Strict Transport Security)
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = 31536000 if ENABLE_SSL else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = ENABLE_SSL
+SECURE_HSTS_PRELOAD = ENABLE_SSL
 
 # Content Security
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -85,11 +85,6 @@ CACHES = {
 # ------------------------------------
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
-
-# ------------------------------------
-# Static & Media Files
-# ------------------------------------
-STATIC_ROOT = config("STATIC_ROOT")
 
 # ------------------------------------
 # Logging

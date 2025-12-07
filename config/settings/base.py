@@ -13,6 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # ------------------------------------
 # Security
 # ------------------------------------
+ENABLE_SSL = config("ENABLE_SSL", default=False, cast=bool) or False
+
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
