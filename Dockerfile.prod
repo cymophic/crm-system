@@ -26,9 +26,6 @@ RUN uv sync --frozen --group prod
 # Copy project code
 COPY . .
 
-# Build minified Tailwind CSS for production
-RUN uv run python manage.py tailwind build
-
 # Expose Gunicorn port
 EXPOSE 8000
 
