@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <!-- Main Content -->
+    <main class="flex grow bg-(--bg-page)">
+        <!-- Toast Messages -->
+        {% if messages %}
+            {% include 'components/messages.html' %}
+        {% endif %}
+
+        <!-- Auth Content -->
+        {% block content %}{% endblock %}
+    </main>
+{% endblock body %}

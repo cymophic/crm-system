@@ -22,12 +22,16 @@ CONTENT_SECURITY_POLICY = {
         "default-src": [SELF],
         "script-src": [
             SELF,
+            "https://fonts.googleapis.com",
             "'unsafe-inline'",
             "'unsafe-eval'",
         ],
-        "style-src": [SELF, "'unsafe-inline'"],
+        "style-src": [SELF, "https://fonts.googleapis.com", "'unsafe-inline'"],
         "img-src": [SELF, "data:"],
-        "font-src": [SELF],
+        "font-src": [
+            SELF,
+            "https://fonts.gstatic.com",
+        ],
         "connect-src": [SELF],
         "frame-ancestors": [NONE],
     },

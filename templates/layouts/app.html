@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+    <!-- Navbar -->
+    <header class="border-b border-(--border-default)">
+        {% include 'components/navbar/navbar.html' %}
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex grow bg-(--bg-page)">
+        <!-- Toast Messages -->
+        {% if messages %}
+            {% include 'components/messages.html' %}
+        {% endif %}
+
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-(--border-default)">
+        {% include 'components/footer/footer.html' %}
+    </footer>
+{% endblock body %}
