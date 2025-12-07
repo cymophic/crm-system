@@ -38,6 +38,8 @@ setup-prod:
 	@uv run python -c "print()"
 	@$(MAKE) superuser
 	@uv run python -c "print()"
+	@$(MAKE) security-status
+	@uv run python -c "print()"
 	@$(MAKE) service-logs
 	@uv run python -c "print()"
 	@echo Production setup complete!
