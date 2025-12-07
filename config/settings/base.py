@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "apps.users",
     # Third-party Packages
     "unfold",
+    "allauth",
+    "allauth.account",
     "django_tailwind_cli",
     "phonenumber_field",
     "djmoney",
@@ -84,6 +86,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",  # django-allauth
     "django_currentuser.middleware.ThreadLocalUserMiddleware",  # django-currentuser
 ]
 
@@ -361,3 +364,44 @@ TAILWIND_CLI_PATH = "tailwind"
 TAILWIND_CLI_SRC_CSS = BASE_DIR / "tailwind" / "input.css"
 TAILWIND_CLI_DIST_CSS = "css/output.css"
 TAILWIND_CLI_ARGS = "--minify"
+
+# ------------------------------------
+# Allauth Integration Settings
+# ------------------------------------
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SITE_ID = 1
+
+ACCOUNT_SIGNUP_FIELDS = [  # (*) indicates required fields
+    "email*",
+    "username",
+    "password1*",
+    "password2*",
+]
+
+ACCOUNT_EMAIL_VERIFICATION = "none"  # mandatory / optional / none
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+ACCOUNT_RATE_LIMITS = {
+    "login_failed": "5/5m",  # 5 failed login attempts per 5 minutes
+    "login": "20/h",  # Max 20 total login attempts per hour
+    "signup": "3/d",  # 3 signups per IP per day
+    "confirm_email": "1/3m/key",  # 1 confirmation email every 3 minutes per email address
+    "reset_password": "5/d/ip",  # 5 password reset requests per IP per day
+    "reset_password_from_key": "20/d/key",  # 20 password reset submissions per reset link per day
+    "change_password": "5/m/user",  # 5 password changes per user per minute
+    "manage_email": "10/m/user",  # 10 email add/remove actions per user per minute
+}
+ACCOUNT_LOGIN_METHODS = ["email"]
+ACCOUNT_SESSION_REMEMBER = None
+
+ACCOUNT_FORMS = {
+    "login": "apps.security.forms.LoginForm",
+    "signup": "apps.security.forms.SignupForm",
+    "change_password": "apps.security.forms.ChangePasswordForm",
+    "reset_password": "apps.security.forms.ResetPasswordForm",
+    "reset_password_from_key": "apps.security.forms.ResetPasswordKeyForm",
+    "add_email": "apps.security.forms.AddEmailForm",
+}
