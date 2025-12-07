@@ -1,0 +1,59 @@
+{% extends "layouts/auth.html" %}
+{% load static i18n %}
+
+{% block title %}
+    Confirm Email
+{% endblock title %}
+
+{% block content %}
+    <div class="flex grow items-center justify-center mx-auto px-4 relative">
+        <div class="my-10 w-full sm:w-96">
+            {% if confirmation %}
+                <!-- Header -->
+                {% include 'account/components/form_header.html' with subtitle='Verify your' title='Email Address' %}
+
+                <!-- Confirmation Message -->
+                <div class="mb-6">
+                    <p class="text-sm text-(--text-body)">
+                        {% blocktrans with email=confirmation.email_address.email username=confirmation.email_address.user.username %}Please confirm that <strong class="text-(--text-title)">{{ email }}</strong> is an email address for user <strong class="text-(--text-title)">{{ username }}</strong>.{% endblocktrans %}
+                    </p>
+                </div>
+
+                <!-- Confirmation Form -->
+                <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                    {% csrf_token %}
+
+                    <div class="space-y-3">
+                        <!-- Submit Button -->
+                        {% include 'buttons/primary.html' with text='Confirm Email' %}
+
+                        <!-- Back to Login -->
+                        {% url 'account_login' as login_url %}
+                        {% include 'buttons/secondary_link.html' with text='Back to Login' url=login_url %}
+                    </div>
+                </form>
+            {% else %}
+                <!-- Invalid/Expired Token -->
+                <div class="border-b border-b-(--border-default) mb-8 pb-6">
+                    <h1 class="font-semibold">
+                        <span class="block text-sm text-(--text-title)">{% trans "Invalid Link" %}</span>
+                        <span class="block font-semibold text-(--text-error) tracking-tight text-xl">{% trans "Confirmation Failed" %}</span>
+                    </h1>
+                </div>
+
+                <div class="text-sm text-(--text-body) mb-6">
+                    <p>{% trans "This email confirmation link expired or is invalid. Please request a new one." %}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-3">
+                    {% url 'account_email' as email_url %}
+                    {% include 'buttons/primary_link.html' with text='Go to Email Settings' url=email_url %}
+
+                    {% url 'account_login' as login_url %}
+                    {% include 'buttons/secondary_link.html' with text='Go Back' url=login_url %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if form.non_field_errors %}
+    <div class="mb-6 p-4 bg-(--input-bg-error) border border-(--alert-error-border) rounded">
+        {% for error in form.non_field_errors %}
+            <p class="text-(--text-error) text-sm">{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
