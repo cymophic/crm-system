@@ -205,11 +205,11 @@ make setup-dev
    ENVIRONMENT=prod
    ```
 
-   Then configure all required production variables: `SECRET_KEY`, `ALLOWED_HOSTS`, `ADMIN_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `REDIS_URL`, `STATIC_ROOT`, `CSRF_TRUSTED_ORIGINS`.
+   Then configure all required production variables: `SECRET_KEY`, `ALLOWED_HOSTS`, `ADMIN_URL`, `ENABLE_SSL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `REDIS_URL`, `STATIC_ROOT`, `CSRF_TRUSTED_ORIGINS`.
   
    Finally, start production:
    ```bash
-   make prod
+   make setup-prod
    ```
 
 ---
@@ -233,6 +233,7 @@ make shell                    # Open Django shell
 ```bash
 make prod                     # Start production environment
 make prod-build               # Build and start production environment
+make security-status          # Run security configuration checks
 ```
 
 ### Database
