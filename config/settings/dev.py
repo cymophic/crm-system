@@ -51,6 +51,11 @@ CACHES = {
 }
 
 # ------------------------------------
+# Sessions
+# ------------------------------------
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# ------------------------------------
 # Logging
 # ------------------------------------
 LOGGING["handlers"]["console"]["level"] = "DEBUG"
