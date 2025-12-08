@@ -1,0 +1,19 @@
+<!-- Reusable Component: Info Box -->
+
+<div class="bg-(--bg-subtle) border border-(--border-default) rounded-lg p-4 {{ margin_class|default:'mb-6' }}">
+    <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-(--color-accent) text-base! mt-0.5">
+            {{ icon|default:'info' }}
+        </span>
+        <div class="text-left {% if full_width %}flex-1{% endif %}">
+            {% if title %}
+                <p class="text-xs font-medium text-(--text-title) mb-1">
+                    {{ title }}
+                </p>
+            {% endif %}
+            <div class="text-xs text-(--text-body)">
+                {{ content }}
+            </div>
+        </div>
+    </div>
+</div>
