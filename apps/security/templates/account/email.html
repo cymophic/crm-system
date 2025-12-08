@@ -76,7 +76,7 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3 mb-6">
                         {% include 'buttons/primary.html' with text='Make Primary' name='action_primary' class='flex-1' %}
-                        {% include 'buttons/secondary.html' with text='Resend' name='action_send' type='submit' class='flex-1' id='resend-button' %}
+                        {% include 'buttons/secondary.html' with text='Verify' name='action_send' type='submit' class='flex-1 hidden' id='resend-button' %}
                         {% include 'buttons/danger.html' with text='Remove' name='action_remove' onclick="return confirm('Do you really want to remove the selected email address?')" type='submit' class='flex-1' %}
                     </div>
                 </form>

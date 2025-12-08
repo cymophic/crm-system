@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Constants
     const STORAGE_KEY = 'emailResent';
 
+    // Button visibility management
+    function hideResendButton() {
+        resendButton.classList.add('hidden');
+    }
+
+    function showResendButton() {
+        resendButton.classList.remove('hidden');
+    }
+
     // Button state management
     function disableResendButton() {
         resendButton.disabled = true;
@@ -20,13 +29,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function enableResendButton() {
         resendButton.disabled = false;
         resendButton.classList.remove(...DISABLED_BUTTON_CLASSES);
-        resendButton.textContent = 'Resend';
+        resendButton.textContent = 'Verify';
     }
 
     // Check if selected email is verified
     function isSelectedEmailVerified() {
         const selectedRadio = document.querySelector('input[name="email"]:checked');
-        if (!selectedRadio) return false;
+        if (!selectedRadio) return true; // Hide button if nothing selected
 
         const emailContainer = selectedRadio.closest('div');
         return emailContainer.querySelector('.bg-\\(--alert-success-bg\\)') !== null;
@@ -40,9 +49,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update button state based on current conditions
     function updateResendButtonState() {
         if (isSelectedEmailVerified()) {
-            disableResendButton();
-        } else if (!isInCooldown()) {
-            enableResendButton();
+            hideResendButton();
+        } else {
+            showResendButton();
+            if (isInCooldown()) {
+                disableResendButton();
+            } else {
+                enableResendButton();
+            }
         }
     }
 
@@ -50,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateButtonText(timeLeft) {
         const minutes = Math.floor(timeLeft / 60000);
         const seconds = Math.floor((timeLeft % 60000) / 1000);
-        resendButton.textContent = `Resend (${minutes}:${seconds.toString().padStart(2, '0')})`;
+        resendButton.textContent = `Verify (${minutes}:${seconds.toString().padStart(2, '0')})`;
     }
 
     // Start cooldown countdown
