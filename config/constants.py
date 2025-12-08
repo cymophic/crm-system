@@ -1,4 +1,4 @@
-COMPANY_NAME = "Personal Systems"
+COMPANY_NAME = "Personal Project"
 
 SYSTEM_NAME = "CRM System"
 SYSTEM_SHORT_NAME = "CRM"
