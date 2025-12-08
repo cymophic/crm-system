@@ -1,5 +1,5 @@
-import { dropdownIn, fadeOut } from '../../animations.js';
-import { DROPDOWN_DURATION } from '../../constants.js';
+import { fadeIn, fadeOut, animateDropdown } from '../../animations.js';
+import { MOBILE_MENU_DURATION } from '../../constants.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
