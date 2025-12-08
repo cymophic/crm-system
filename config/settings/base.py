@@ -2,6 +2,7 @@ from pathlib import Path
 
 from csp.constants import NONE, SELF
 from decouple import Csv, config
+from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -377,7 +378,6 @@ UNFOLD = {
 TAILWIND_CLI_PATH = "tailwind"
 TAILWIND_CLI_SRC_CSS = BASE_DIR / "tailwind" / "input.css"
 TAILWIND_CLI_DIST_CSS = "css/output.css"
-TAILWIND_CLI_ARGS = "--minify"
 
 # ------------------------------------
 # Allauth Integration Settings
