@@ -1,4 +1,4 @@
 {% load i18n %}
 {% blocktrans %}
-    A sign-in code has been sent to {{recipient}}
+    A login code has been sent to your email address
 {% endblocktrans %}

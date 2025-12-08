@@ -1,4 +1,4 @@
 {% load i18n %}
 {% blocktrans %}
-    Removed email address {{email}}
+    Removed email address
 {% endblocktrans %}

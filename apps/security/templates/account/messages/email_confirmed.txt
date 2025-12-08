@@ -1,4 +1,4 @@
 {% load i18n %}
 {% blocktrans %}
-    Successfully confirmed {{ email }}
+    Email successfully confirmed
 {% endblocktrans %}
