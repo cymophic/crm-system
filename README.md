@@ -27,14 +27,23 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 
 ```bash
 crm-system/
+├── .github/workflows/            # GitHub Actions workflows
 ├── .venv/                        # Python Virtual Environment (ignored by Git)
 ├── apps/                         # Django applications
+│   ├── analytics/                # Analytics & dashboard
+│   ├── base/                     # Core app
 │   ├── common/                   # Shared utilities across all apps
-│   ├── security/                 # Authentication and security
-│   └── users/                    # User management and authentication
+│   │   └── templates/            # Reusable UI components
+│   ├── security/                 # Authentication & account management
+│   └── users/                    # User management
 ├── config/                       # Django project settings
 │   ├── formats/                  # Custom date/time/number formats by locale
 │   ├── settings/                 # Split settings (base, dev, prod)
+│   │   ├── base.py
+│   │   ├── dev.py
+│   │   └── prod.py
+│   ├── constants.py              # Project-wide constants
+│   ├── context_processors.py     # Custom template context processors
 │   ├── asgi.py
 │   ├── urls.py
 │   └── wsgi.py
@@ -44,12 +53,22 @@ crm-system/
 │   └── errors.log                # Error-only logs
 ├── media/                        # User-uploaded files
 ├── static/                       # Project-wide static files
-│   └── css
-│       └── output.css            # Compiled Tailwind CSS
+│   ├── css/
+│   │   ├── base.css              # Base styles
+│   │   ├── output.css            # Compiled Tailwind CSS
+│   │   └── variables.css         # Defined CSS variables
+│   └── js/
+│       └── components/           # Component scripts (messages, navbar) 
 ├── staticfiles/                  # Collected static files for production
 ├── tailwind/                     # Tailwind CSS configuration
 │   └── input.css                 # Tailwind source CSS
 ├── templates/                    # Project-wide HTML templates
+│   ├── base.html                 # Master template
+│   ├── components/               # Reusable UI components
+│   └── layouts/                  # Layout templates
+│       ├── app.html              # Main app layout
+│       ├── auth.html             # Authentication pages layout
+│       └── error.html            # Error pages layout
 ├── .dockerignore
 ├── .env                          # Environment variables (ignored by Git)
 ├── .env.example                  # Environment variables template
@@ -126,6 +145,10 @@ make setup-dev
    # Custom admin URL path (security through obscurity)
    # DEV: Defaults to 'admin/' if empty | PROD: Required
    ADMIN_URL=
+
+   # --- SSL Configuration ---
+   # Set to True only when running with valid SSL certificate
+   ENABLE_SSL=False
 
    # --- Email Configuration ---
    # Hostname of the email provider's SMTP server
@@ -219,6 +242,7 @@ make setup-dev
 ### Initial Setup
 ```bash
 make setup-dev                # Create initial setup for development
+make setup-prod               # Create initial setup for production
 ```
 
 ### Development
@@ -265,10 +289,13 @@ make reset                    # Remove ALL containers, volumes, and data
 
 ### Logs
 ```bash
-make service-logs             # Show service logs
-make app-logs                 # Show application logs
-make error-logs               # Show error logs
-make django-logs              # Show Django logs
+make service-logs             # Show service logs (default: 20 lines)
+make app-logs                 # Show application logs (default: 20 lines)
+make error-logs               # Show error logs (default: 20 lines)
+make django-logs              # Show Django logs (default: 20 lines)
+
+# Specify line count
+make service-logs lines=50    # Show last 50 lines
 ```
 
 ---
