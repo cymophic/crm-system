@@ -23,6 +23,7 @@ CONTENT_SECURITY_POLICY = {
         "script-src": [
             SELF,
             "https://fonts.googleapis.com",
+            "https://cdnjs.cloudflare.com",
             "'unsafe-inline'",
             "'unsafe-eval'",
         ],

@@ -1,0 +1,57 @@
+{% load email_tags %}
+
+<div class="block relative">
+    <!-- Toggle Button -->
+    <a data-dropdown-trigger="user-menu" class="block cursor-pointer select-none">
+        <span class="material-symbols-outlined text-xl! text-(--text-body)/75 my-1">
+            person
+        </span>
+    </a>
+
+    <!-- Dropdown Menu -->
+    <div id="user-menu" data-dropdown-menu class="absolute hidden bg-(--bg-surface) border border-(--border-default) flex-col leading-none py-1 right-1 rounded-lg shadow-lg top-8 w-46 z-50">
+        <a href="#" class="flex flex-col justify-center mx-1 px-3 py-1.5 mb-1 hover:bg-(--nav-dropdown-hover) rounded-lg transition-colors">
+            <!-- User Name -->
+            <p class="text-sm font-medium truncate text-(--text-body)">
+                {{ user.get_full_name|default:user.username }}
+            </p>
+
+            <!-- Email -->
+            {% if user.email %}
+                <p class="text-xs truncate text-(--text-body)">
+                    {{ user.email }}
+                </p>
+            {% endif %}
+        </a>
+
+        <div class="py-px pt-1 border-t border-(--border-default)">
+            <!-- Admin Panel -->
+            {% if user.is_superuser %}
+                <a href="{% url 'admin:index' %}" class="block mx-1 px-3 py-1 rounded-lg hover:bg-(--nav-dropdown-hover) text-sm text-(--text-body)">
+                    View Admin Panel
+                </a>
+            {% endif %}
+
+            <!-- View Emails -->
+            <a href="{% url 'account_email' %}" class="block mx-1 px-3 py-1 rounded-lg hover:bg-(--nav-dropdown-hover) text-sm text-(--text-body)">
+                Email Settings
+            </a>
+
+            <!-- Change Password -->
+            <a href="{% url 'account_change_password' %}" class="block mx-1 px-3 py-1 rounded-lg hover:bg-(--nav-dropdown-hover) text-sm text-(--text-body)">
+                Change Password
+            </a>
+            <!-- Get Help -->
+            <a href="mailto:{% get_emails 'helpdesk' %}?bcc={% get_emails 'admin' %}" class="block mx-1 px-3 py-1 rounded-lg hover:bg-(--nav-dropdown-hover) text-sm text-(--text-body)">
+                Get Help
+            </a>
+        </div>
+
+        <div class="border-t border-(--border-default) mt-1 pt-1 mx-1">
+            <!-- Logout -->
+            <a href="{% url 'account_logout' %}" type="submit" class="block px-3 py-1 text-left text-(--button-danger-text) rounded-lg hover:bg-(--button-danger-bg-hover) text-sm cursor-pointer bg-transparent border-none w-full">
+                Log Out
+            </a>
+        </div>
+    </div>
+</div>

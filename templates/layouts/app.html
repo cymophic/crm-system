@@ -23,3 +23,10 @@
         {% include 'components/footer/footer.html' %}
     </footer>
 {% endblock body %}
+
+<!-- Navigation Scripts -->
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/components/navbar/desktop-nav.js' %}" type="module"></script>
+    <script src="{% static 'js/components/navbar/mobile-nav.js' %}" type="module"></script>
+{% endblock %}

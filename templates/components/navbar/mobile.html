@@ -1,0 +1,64 @@
+<div id="mobile-menu" class="hidden md:hidden bg-(--bg-surface)">
+    <div class="px-4 py-3 space-y-1">
+        <!-- Dashboard -->
+        <a href="{% url 'analytics:dashboard' %}" class="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-(--text-body) hover:bg-(--bg-surface-hover) rounded-md">
+            <span>Dashboard</span>
+            <span class="material-symbols-outlined text-lg! invisible!">expand_more</span>
+        </a>
+
+        <!-- Clients -->
+        <div class="space-y-1">
+            <button class="mobile-dropdown-toggle flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-(--text-body) hover:bg-(--bg-surface-hover) rounded-md">
+                <span>Clients</span>
+                <span class="material-symbols-outlined text-lg! transform transition-transform">expand_more</span>
+            </button>
+
+            <div class="mobile-dropdown-content hidden ml-4 space-y-1">
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='View Clients' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='POCs' %}
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="space-y-1">
+            <button class="mobile-dropdown-toggle flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-(--text-body) hover:bg-(--bg-surface-hover) rounded-md">
+                <span>Projects</span>
+                <span class="material-symbols-outlined text-lg! transform transition-transform">expand_more</span>
+            </button>
+
+            <div class="mobile-dropdown-content hidden ml-4 space-y-1">
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='View Projects' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='Activities' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='QA Logs' %}
+            </div>
+        </div>
+
+        <!-- Sales -->
+        <div class="space-y-1">
+            <button class="mobile-dropdown-toggle flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-(--text-body) hover:bg-(--bg-surface-hover) rounded-md">
+                <span>Sales</span>
+                <span class="material-symbols-outlined text-lg! transform transition-transform">expand_more</span>
+            </button>
+
+            <div class="mobile-dropdown-content hidden ml-4 space-y-1">
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='Accounts' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='Leads' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='Opportunities' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='Events' %}
+            </div>
+        </div>
+        <!-- Solutions -->
+        <div class="space-y-1">
+            <button class="mobile-dropdown-toggle flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-(--text-body) hover:bg-(--bg-surface-hover) rounded-md">
+                <span>Solutions</span>
+                <span class="material-symbols-outlined text-lg! transform transition-transform">expand_more</span>
+            </button>
+
+            <div class="mobile-dropdown-content hidden ml-4 space-y-1">
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='View Solutions' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='Vendors' %}
+                {% include 'dropdown/navbar/mobile/item.html' with url='analytics:dashboard' text='POCs' %}
+            </div>
+        </div>
+    </div>
+</div>
