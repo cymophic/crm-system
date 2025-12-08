@@ -11,7 +11,7 @@
     <main class="flex grow bg-(--bg-page)">
         <!-- Toast Messages -->
         {% if messages %}
-            {% include 'components/messages.html' %}
+            {% include 'components/messages/container.html' %}
         {% endif %}
 
         <!-- Page Content -->
@@ -24,9 +24,13 @@
     </footer>
 {% endblock body %}
 
-<!-- Navigation Scripts -->
 {% block scripts %}
     {{ block.super }}
+
+    <!-- Navigation Scripts -->
     <script src="{% static 'js/components/navbar/desktop-nav.js' %}" type="module"></script>
     <script src="{% static 'js/components/navbar/mobile-nav.js' %}" type="module"></script>
+
+    <!-- Messages Animation Scripts -->
+    <script src="{% static 'js/components/messages/toast-animation.js' %}" type="module"></script>
 {% endblock %}

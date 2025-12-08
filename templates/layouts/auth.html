@@ -1,14 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block body %}
     <!-- Main Content -->
     <main class="flex grow bg-(--bg-page)">
         <!-- Toast Messages -->
         {% if messages %}
-            {% include 'components/messages.html' %}
+            {% include 'components/messages/container.html' %}
         {% endif %}
 
         <!-- Auth Content -->
         {% block content %}{% endblock %}
     </main>
 {% endblock body %}
+
+{% block scripts %}
+    {{ block.super }}
+
+    <!-- Messages Animation Scripts -->
+    <script src="{% static 'js/components/messages/toast-animation.js' %}" type="module"></script>
+{% endblock %}

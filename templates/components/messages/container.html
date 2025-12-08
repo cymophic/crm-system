@@ -1,0 +1,5 @@
+<div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 space-y-2 w-auto min-w-64 max-w-[calc(100%-2rem)] sm:max-w-md">
+    {% for message in messages %}
+        {% include 'components/messages/message.html' with message=message %}
+    {% endfor %}
+</div>
