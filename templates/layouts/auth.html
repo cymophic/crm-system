@@ -13,10 +13,3 @@
         {% block content %}{% endblock %}
     </main>
 {% endblock body %}
-
-{% block scripts %}
-    {{ block.super }}
-
-    <!-- Messages Animation Scripts -->
-    <script src="{% static 'js/components/messages/toast-animation.js' %}" type="module"></script>
-{% endblock %}

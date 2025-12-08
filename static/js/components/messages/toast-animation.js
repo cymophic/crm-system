@@ -6,9 +6,6 @@ function animateToasts() {
     const toasts = document.querySelectorAll('[role="alert"]');
 
     toasts.forEach((toast) => {
-        // Remove initial hidden state classes (set in HTML for smooth entry)
-        toast.classList.remove('opacity-0', '-translate-y-5');
-
         // Animate toast entrance
         fadeIn(toast);
 
