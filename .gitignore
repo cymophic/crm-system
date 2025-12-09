@@ -12,8 +12,9 @@ media/
 staticfiles/
 collected_static/
 
-# Tailwind CLI Binary File
+# Tailwind
 tailwind/tailwindcss*
+static/css/dist/output.css
 
 # Database
 *.sqlite3
