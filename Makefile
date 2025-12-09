@@ -15,6 +15,8 @@ setup-dev:
 	@uv run python -c "print()"
 	@$(MAKE) migrate
 	@uv run python -c "print()"
+	@$(MAKE) tailwind-build
+	@uv run python -c "print()"
 	@$(MAKE) restart
 	@uv run python -c "print()"
 	@$(MAKE) superuser
