@@ -272,7 +272,7 @@ make superuser                # Create Django superuser
 make collectstatic            # Collect static files
 make check                    # Check for project issues
 make test                     # Run test suite
-make tailwind-build           # Build minified CSS for production
+make build-css                # Build minified CSS for production
 make manage.py cmd="..."      # Run custom manage.py command
 ```
 

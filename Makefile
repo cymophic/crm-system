@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 -include .env
 export ENVIRONMENT ?= dev
 
-.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test tailwind-build manage.py service-logs app-logs error-logs django-logs
+.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test build-css manage.py service-logs app-logs error-logs django-logs
 
 # ------------------------------------
 # Setup Commands
@@ -15,7 +15,7 @@ setup-dev:
 	@uv run python -c "print()"
 	@$(MAKE) migrate
 	@uv run python -c "print()"
-	@$(MAKE) tailwind-build
+	@$(MAKE) build-css
 	@uv run python -c "print()"
 	@$(MAKE) restart
 	@uv run python -c "print()"
@@ -32,7 +32,7 @@ setup-prod:
 	@uv run python -c "print()"
 	@$(MAKE) migrate
 	@uv run python -c "print()"
-	@$(MAKE) tailwind-build
+	@$(MAKE) build-css
 	@uv run python -c "print()"
 	@$(MAKE) collectstatic
 	@uv run python -c "print()"
@@ -185,7 +185,7 @@ test:
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py test
 
 # Build minified CSS for production
-tailwind-build:
+build-css:
 	@echo Building Tailwind CSS...
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py tailwind build --force
 
