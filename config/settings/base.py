@@ -377,7 +377,7 @@ UNFOLD = {
 # ------------------------------------
 TAILWIND_CLI_PATH = "tailwind"
 TAILWIND_CLI_SRC_CSS = BASE_DIR / "tailwind" / "input.css"
-TAILWIND_CLI_DIST_CSS = "css/output.css"
+TAILWIND_CLI_DIST_CSS = "css/dist/output.css"
 
 # ------------------------------------
 # Allauth Integration Settings
