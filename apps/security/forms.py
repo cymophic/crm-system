@@ -4,9 +4,14 @@ from allauth.account.forms import LoginForm as AllAuthLoginForm
 from allauth.account.forms import ResetPasswordForm as AllAuthResetPasswordForm
 from allauth.account.forms import ResetPasswordKeyForm as AllAuthResetPasswordKeyForm
 from allauth.account.forms import SignupForm as AllAuthSignupForm
+from django import forms
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 
-from apps.common.validators import username_validator
+from apps.common.validators import human_name_validator, username_validator
 from apps.common.widgets import EmailInputWidget, PasswordInputWidget, TextInputWidget
+from apps.users.models import User
+from apps.users.validators import validate_unique_username
 
 
 class LoginForm(AllAuthLoginForm):
@@ -80,3 +85,99 @@ class AddEmailForm(AllAuthAddEmailForm):
                 "placeholder": "Enter new email address",
             }
         )
+
+
+class CompleteProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # First Name
+        self.fields["first_name"].label = "First Name"
+        self.fields["first_name"].validators.append(human_name_validator)
+        self.fields["first_name"].widget = TextInputWidget()
+
+        # Last Name
+        self.fields["last_name"].label = "Last Name"
+        self.fields["last_name"].validators.append(human_name_validator)
+        self.fields["last_name"].widget = TextInputWidget()
+
+        # Job Title
+        self.fields["job_title"].label = "Job Title"
+        self.fields["job_title"].widget = TextInputWidget()
+
+        # Phone
+        self.fields["phone"].label = "Phone Number"
+        self.fields["phone"].widget = TextInputWidget(
+            attrs={
+                "help_text": "Use the local format (e.g., 09XX XXX XXXX) or include the country code (e.g., +63 XXX XXX XXXX)",
+            }
+        )
+        self.fields["phone"].error_messages["invalid"] = "Enter a valid phone number"
+
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "job_title",
+            "phone",
+        ]
+
+
+class EditProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Email (Read-only)
+        self.fields["email"].label = "Primary Email"
+        self.fields["email"].disabled = True
+        email_url = reverse("account_email")
+        self.fields["email"].help_text = mark_safe(
+            f'Change your primary email <a href="{email_url}" class="hover:underline text-(--text-link-muted)">here</a>'
+        )
+        self.fields["email"].widget = EmailInputWidget()
+
+        # Username
+        self.fields["username"].label = "Username"
+        self.fields["username"].validators.append(username_validator)
+        self.fields["username"].widget = TextInputWidget()
+
+        # First Name
+        self.fields["first_name"].label = "First Name"
+        self.fields["first_name"].validators.append(human_name_validator)
+        self.fields["first_name"].widget = TextInputWidget()
+
+        # Last Name
+        self.fields["last_name"].label = "Last Name"
+        self.fields["last_name"].validators.append(human_name_validator)
+        self.fields["last_name"].widget = TextInputWidget()
+
+        # Job Title
+        self.fields["job_title"].label = "Job Title"
+        self.fields["job_title"].widget = TextInputWidget()
+
+        # Phone
+        self.fields["phone"].label = "Phone Number"
+        self.fields["phone"].widget = TextInputWidget(
+            attrs={
+                "help_text": "Use the local format (e.g., 09XX XXX XXXX) or include the country code (e.g., +63 XXX XXX XXXX)",
+            }
+        )
+        self.fields["phone"].error_messages["invalid"] = "Enter a valid phone number"
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        validate_unique_username(username, self.instance)
+
+        return username
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "job_title",
+            "phone",
+            "email",
+        ]

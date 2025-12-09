@@ -12,5 +12,5 @@ urlpatterns = [
     # Dashboard and Analytics URLs
     path("", include("apps.analytics.urls")),
     # Authentication and Security URLs
-    # path("", include("apps.security.urls")),
+    path("", include("apps.security.urls")),
 ]

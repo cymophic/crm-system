@@ -10,7 +10,7 @@
 
     <!-- Dropdown Menu -->
     <div id="user-menu" data-dropdown-menu class="absolute hidden bg-(--bg-surface) border border-(--border-default) flex-col leading-none py-1 right-1 rounded-lg shadow-lg top-8 w-46 z-50">
-        <a href="#" class="flex flex-col justify-center mx-1 px-3 py-1.5 mb-1 hover:bg-(--nav-dropdown-hover) rounded-lg transition-colors">
+        <a href="{% url 'security:edit_profile' %}" class="flex flex-col justify-center mx-1 px-3 py-1.5 mb-1 hover:bg-(--nav-dropdown-hover) rounded-lg transition-colors">
             <!-- User Name -->
             <p class="text-sm font-medium truncate text-(--text-body)">
                 {{ user.get_full_name|default:user.username }}
