@@ -13,8 +13,8 @@ staticfiles/
 collected_static/
 
 # Tailwind
-tailwind/tailwindcss*
-static/css/dist/output.css
+static/css/tailwind/cli/tailwindcss*
+static/css/tailwind/dist/output.css
 
 # Database
 *.sqlite3

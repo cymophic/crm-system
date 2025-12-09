@@ -54,14 +54,13 @@ crm-system/
 ├── media/                        # User-uploaded files
 ├── static/                       # Project-wide static files
 │   ├── css/
+│   │   ├── tailwind/             # Tailwind CSS configuration
 │   │   ├── base.css              # Base styles
 │   │   ├── output.css            # Compiled Tailwind CSS
 │   │   └── variables.css         # Defined CSS variables
 │   └── js/
 │       └── components/           # Component scripts (messages, navbar) 
 ├── staticfiles/                  # Collected static files for production
-├── tailwind/                     # Tailwind CSS configuration
-│   └── input.css                 # Tailwind source CSS
 ├── templates/                    # Project-wide HTML templates
 │   ├── base.html                 # Master template
 │   ├── components/               # Reusable UI components
