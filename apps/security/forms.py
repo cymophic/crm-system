@@ -107,11 +107,7 @@ class CompleteProfileForm(forms.ModelForm):
 
         # Phone
         self.fields["phone"].label = "Phone Number"
-        self.fields["phone"].widget = TextInputWidget(
-            attrs={
-                "help_text": "Use the local format (e.g., 09XX XXX XXXX) or include the country code (e.g., +63 XXX XXX XXXX)",
-            }
-        )
+        self.fields["phone"].widget = TextInputWidget()
         self.fields["phone"].error_messages["invalid"] = "Enter a valid phone number"
 
     class Meta:
@@ -158,11 +154,7 @@ class EditProfileForm(forms.ModelForm):
 
         # Phone
         self.fields["phone"].label = "Phone Number"
-        self.fields["phone"].widget = TextInputWidget(
-            attrs={
-                "help_text": "Use the local format (e.g., 09XX XXX XXXX) or include the country code (e.g., +63 XXX XXX XXXX)",
-            }
-        )
+        self.fields["phone"].widget = TextInputWidget()
         self.fields["phone"].error_messages["invalid"] = "Enter a valid phone number"
 
     def clean_username(self):
