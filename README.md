@@ -17,7 +17,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 - **Frontend:** Tailwind CSS 4.x
 - **Backend:** Django 5.2.8+ (Python 3.13)
 - **Database:** SQLite3 (dev) / PostgreSQL (prod)
-- **Cache:** Redis
+- **Cache & Message Broker:** Redis
 - **Task Queue:** Celery
 - **Admin Interface:** Django Unfold
 - **Containerization:** Docker + Docker Compose
@@ -320,9 +320,7 @@ make service-logs service=db lines=100
 
 ## 📝 Notes
 
-- **Development mode** uses SQLite and Redis by default, runs Django's development server with live code reload via volume mounting. Optional PostgreSQL support available.
-- **Production mode** requires PostgreSQL and Redis, runs Gunicorn with immutable container images
-- Logs are automatically rotated (max 10MB per file, 5 backups)
-- Static files are served via WhiteNoise in production
-- Session expires after 1 day or when browser closes
-- **Note:** Make commands require at least one container to be running. If no containers are running, start with `make dev` or `make prod` first.
+- **Development mode** uses SQLite, Redis, and Celery by default, runs Django's development server with live code reload via volume mounting. Optional PostgreSQL support available.
+- **Production mode** requires PostgreSQL, Redis, and Celery, runs Gunicorn with immutable container images
+- **Application file logs** are automatically rotated (max 10MB per file, 5 backups)
+- **Make commands** require at least one container to be running. If no containers are running, start with `make dev` or `make prod` first.
