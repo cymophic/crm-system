@@ -213,10 +213,10 @@ celery-status:
 # Log Management
 # ------------------------------------
 
-# Display all services output logs
+# Display services output logs
 service-logs:
-	@echo Showing last $(or $(lines),20) lines of service logs...
-	@docker-compose logs $(ENVIRONMENT) --tail=$(or $(lines),20)
+	@echo Showing last $(or $(lines),20) lines of $(or $(service),$(ENVIRONMENT)) logs...
+	@docker-compose logs $(or $(service),$(ENVIRONMENT)) --tail=$(or $(lines),20)
 
 # View application logs (from logs/app.log)
 app-logs:

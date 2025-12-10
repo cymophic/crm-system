@@ -49,7 +49,7 @@ crm-system/
 │   ├── asgi.py
 │   ├── urls.py
 │   └── wsgi.py
-├── logs/                         # Application logs (ignored by Git)
+├── logs/
 │   ├── app.log                   # Application logs
 │   ├── django.log                # Django framework logs
 │   └── errors.log                # Error-only logs
@@ -244,67 +244,76 @@ make setup-dev
 
 ### Initial Setup
 ```bash
-make setup-dev                # Create initial setup for development
-make setup-prod               # Create initial setup for production
+make setup-dev                    # Create initial setup for development
+make setup-prod                   # Create initial setup for production
 ```
 
 ### Development
 ```bash
-make dev                      # Start development environment
-make dev-build                # Build and start development environment
-make bash                     # Open container bash shell
-make shell                    # Open Django shell
+make dev                          # Start development environment
+make dev-build                    # Build and start development environment
+make bash                         # Open container bash shell
+make shell                        # Open Django shell
 ```
 
 ### Production
 ```bash
-make prod                     # Start production environment
-make prod-build               # Build and start production environment
-make security-status          # Run security configuration checks
+make prod                         # Start production environment
+make prod-build                   # Build and start production environment
+make security-status              # Run security configuration checks
 ```
 
 ### Database
 ```bash
-make migrate                  # Apply database migrations
-make migrations               # Create new migrations
-make showmigrations           # Show migration status
+make migrate                      # Apply database migrations
+make migrations                   # Create new migrations
+make showmigrations               # Show migration status
 ```
 
 ### Container Management
 ```bash
-make build                    # Build Docker images
-make status                   # Show container status
-make restart                  # Restart containers
-make down                     # Stop and remove containers
-make clean                    # Remove cache and OS-generated files
-make reset                    # Remove ALL containers, volumes, and data
+make build                        # Build Docker images
+make status                       # Show container status
+make restart                      # Restart containers
+make down                         # Stop and remove containers
+make clean                        # Remove cache and OS-generated files
+make reset                        # Remove ALL containers, volumes, and data
 ```
 
 ### Application Management
 ```bash
-make superuser                # Create Django superuser
-make collectstatic            # Collect static files
-make check                    # Check for project issues
-make test                     # Run test suite
-make build-css                # Build minified CSS for production
-make manage.py cmd="..."      # Run custom manage.py command
+make superuser                    # Create Django superuser
+make collectstatic                # Collect static files
+make check                        # Check for project issues
+make test                         # Run test suite
+make build-css                    # Build minified CSS for production
+make manage.py cmd="..."          # Run custom manage.py command
 ```
 
 ### Task Management
 ```bash
-make celery-worker            # Start Celery worker
-make celery-status            # Check Celery worker status
+make celery-worker                # Start Celery worker
+make celery-status                # Check Celery worker status
 ```
 
 ### Logs
 ```bash
-make service-logs             # Show service logs (default: 20 lines)
-make app-logs                 # Show application logs (default: 20 lines)
-make error-logs               # Show error logs (default: 20 lines)
-make django-logs              # Show Django logs (default: 20 lines)
+# View main container logs
+make service-logs                 # View environment container logs
 
-# Specify line count
-make service-logs lines=50    # Show last 50 lines
+# View specific service logs
+make service-logs service=db      # View PostgreSQL database logs
+make service-logs service=celery  # View Celery logs
+make service-logs service=redis   # View Redis logs
+
+# View application file logs
+make app-logs                     # View logs/app.log
+make error-logs                   # View logs/errors.log
+make django-logs                  # View logs/django.log
+
+# View more/fewer lines (default: 20)
+make app-logs lines=10
+make service-logs service=db lines=100
 ```
 
 ---
