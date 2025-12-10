@@ -432,3 +432,15 @@ ACCOUNT_FORMS = {
     "reset_password_from_key": "apps.security.forms.ResetPasswordKeyForm",
     "add_email": "apps.security.forms.AddEmailForm",
 }
+
+# ------------------------------------
+# Celery Configuration
+# ------------------------------------
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes

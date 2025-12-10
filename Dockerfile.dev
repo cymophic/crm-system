@@ -27,4 +27,4 @@ RUN uv sync --frozen --group dev
 EXPOSE 8000
 
 # Run Django development server with Tailwind watch
-CMD ["uv", "run", "python", "manage.py", "tailwind", "runserver", "0.0.0.0:8000"]
+CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

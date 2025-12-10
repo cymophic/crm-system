@@ -18,6 +18,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 - **Backend:** Django 5.2.8+ (Python 3.13)
 - **Database:** SQLite3 (dev) / PostgreSQL (prod)
 - **Cache:** Redis
+- **Task Queue:** Celery
 - **Admin Interface:** Django Unfold
 - **Containerization:** Docker + Docker Compose
 
@@ -42,6 +43,7 @@ crm-system/
 │   │   ├── base.py
 │   │   ├── dev.py
 │   │   └── prod.py
+│   ├── celery.py                 # Celery instance setup
 │   ├── constants.py              # Project-wide constants
 │   ├── context_processors.py     # Custom template context processors
 │   ├── asgi.py
@@ -268,6 +270,16 @@ make migrations               # Create new migrations
 make showmigrations           # Show migration status
 ```
 
+### Container Management
+```bash
+make build                    # Build Docker images
+make status                   # Show container status
+make restart                  # Restart containers
+make down                     # Stop and remove containers
+make clean                    # Remove cache and OS-generated files
+make reset                    # Remove ALL containers, volumes, and data
+```
+
 ### Application Management
 ```bash
 make superuser                # Create Django superuser
@@ -278,14 +290,10 @@ make build-css                # Build minified CSS for production
 make manage.py cmd="..."      # Run custom manage.py command
 ```
 
-### Container Management
+### Task Management
 ```bash
-make build                    # Build Docker images
-make status                   # Show container status
-make restart                  # Restart containers
-make down                     # Stop and remove containers
-make clean                    # Remove cache and OS-generated files
-make reset                    # Remove ALL containers, volumes, and data
+make celery-worker            # Start Celery worker
+make celery-status            # Check Celery worker status
 ```
 
 ### Logs

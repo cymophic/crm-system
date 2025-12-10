@@ -22,6 +22,21 @@ services:
     ports:
       - "6379:6379"
 
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.${ENVIRONMENT:-dev}
+    profiles: ["dev", "prod"]
+    command: uv run celery -A config worker --loglevel=info
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_started
+
   dev:
     build:
       context: .

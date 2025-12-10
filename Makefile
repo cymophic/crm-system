@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 -include .env
 export ENVIRONMENT ?= dev
 
-.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test build-css manage.py service-logs app-logs error-logs django-logs
+.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test build-css manage.py celery-worker celery-status service-logs app-logs error-logs django-logs
 
 # ------------------------------------
 # Setup Commands
@@ -192,6 +192,22 @@ build-css:
 # Run custom manage.py command
 manage.py:
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py $(cmd)
+
+
+# ------------------------------------
+# Task Management
+# ------------------------------------
+
+# Start Celery worker
+celery-worker:
+	@echo Starting Celery worker...
+	@docker-compose exec celery uv run celery -A config worker --loglevel=info
+
+# Check Celery status
+celery-status:
+	@echo Checking Celery worker status...
+	@docker-compose exec celery uv run celery -A config inspect ping
+
 
 # ------------------------------------
 # Log Management
