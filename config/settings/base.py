@@ -378,6 +378,7 @@ UNFOLD = {
 TAILWIND_CLI_PATH = "static/css/tailwind/cli/"
 TAILWIND_CLI_SRC_CSS = "static/css/tailwind/src/input.css"
 TAILWIND_CLI_DIST_CSS = "css/tailwind/dist/output.css"
+TAILWIND_CLI_ARGS = "--minify"
 
 # ------------------------------------
 # Allauth Integration Settings
