@@ -34,8 +34,12 @@ collected_static/
 *.swp
 *.swo
 
-# Other
-README.md
+# Docker & Development
+Makefile
+docker-compose.yml
 Dockerfile
 Dockerfile.*
 .dockerignore
+
+# Others
+README.md
