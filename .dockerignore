@@ -37,4 +37,5 @@ collected_static/
 # Other
 README.md
 Dockerfile
+Dockerfile.*
 .dockerignore
