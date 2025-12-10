@@ -21,6 +21,11 @@ static/css/tailwind/dist/output.css
 *.sqlite3-journal
 db.sqlite3
 
+# Test Coverage
+htmlcov/
+.coverage
+.coverage.*
+
 # Logs
 *.log
 logs/
