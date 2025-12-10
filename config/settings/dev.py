@@ -41,16 +41,6 @@ DATABASES = {"default": dj_database_url.parse(DATABASE_DEV)}
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 50000
 
 # ------------------------------------
-# Cache
-# ------------------------------------
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "crm-cache",
-    }
-}
-
-# ------------------------------------
 # Sessions
 # ------------------------------------
 SESSION_ENGINE = "django.contrib.sessions.backends.db"

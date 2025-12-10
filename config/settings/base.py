@@ -133,6 +133,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # ------------------------------------
+# Cache
+# ------------------------------------
+REDIS_URL = config("REDIS_URL", default="redis://redis:6379/0")
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+    }
+}
+
+# ------------------------------------
 # Sessions
 # ------------------------------------
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

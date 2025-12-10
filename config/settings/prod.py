@@ -69,18 +69,6 @@ DATABASE_PROD = (
 DATABASES = {"default": dj_database_url.parse(DATABASE_PROD, conn_max_age=600)}
 
 # ------------------------------------
-# Cache
-# ------------------------------------
-REDIS_URL = config("REDIS_URL")
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
-        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-    }
-}
-
-# ------------------------------------
 # Sessions
 # ------------------------------------
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"

@@ -17,7 +17,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 - **Frontend:** Tailwind CSS 4.x
 - **Backend:** Django 5.2.8+ (Python 3.13)
 - **Database:** SQLite3 (dev) / PostgreSQL (prod)
-- **Cache:** Local Memory Cache (dev) / Redis (prod)
+- **Cache:** Redis
 - **Admin Interface:** Django Unfold
 - **Containerization:** Docker + Docker Compose
 
@@ -149,6 +149,13 @@ make setup-dev
    # Set to True only when running with valid SSL certificate
    ENABLE_SSL=False
 
+   # --- Redis Configuration ---
+   # Redis connection URL for caching (used in both dev and prod)
+   # Format: redis://HOST:PORT/DB_NUMBER
+   # For Docker: redis://redis:6379/0
+   # For local: redis://localhost:6379/0
+   REDIS_URL=redis://redis:6379/0
+
    # --- Email Configuration ---
    # Hostname of the email provider's SMTP server
    EMAIL_HOST=smtp.gmail.com
@@ -182,11 +189,6 @@ make setup-dev
    POSTGRES_DB=your_database_name
    POSTGRES_USER=your_database_user
    POSTGRES_PASSWORD=your_database_password
-
-   # Redis connection URL for production caching
-   # Format: redis://HOST:PORT/DB_NUMBER
-   # Example: redis://localhost:6379/0
-   REDIS_URL=redis://localhost:6379/0
 
    # Directory where static files are collected for production
    # Absolute path (e.g., /app/staticfiles)
@@ -301,7 +303,7 @@ make service-logs lines=50    # Show last 50 lines
 
 ## 📝 Notes
 
-- **Development mode** uses SQLite by default and runs Django's development server with live code reload via volume mounting. Optional PostgreSQL and Redis support available.
+- **Development mode** uses SQLite and Redis by default, runs Django's development server with live code reload via volume mounting. Optional PostgreSQL support available.
 - **Production mode** requires PostgreSQL and Redis, runs Gunicorn with immutable container images
 - Logs are automatically rotated (max 10MB per file, 5 backups)
 - Static files are served via WhiteNoise in production
