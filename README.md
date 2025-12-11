@@ -300,6 +300,7 @@ make celery-status                # Check Celery worker status
 ```bash
 # View main container logs
 make service-logs                 # View environment container logs
+make service-logs follow=true     # Follow logs in real-time
 
 # View specific service logs
 make service-logs service=db      # View PostgreSQL database logs
@@ -314,6 +315,10 @@ make django-logs                  # View logs/django.log
 # View more/fewer lines (default: 20)
 make app-logs lines=10
 make service-logs service=db lines=100
+
+# Combine options
+make service-logs lines=50 follow=true
+make service-logs service=celery follow=true
 ```
 
 ---
