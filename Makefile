@@ -216,21 +216,26 @@ celery-status:
 # Display services output logs
 service-logs:
 	@echo Showing last $(or $(lines),20) lines of $(or $(service),$(ENVIRONMENT)) logs...
-	@docker-compose logs $(or $(service),$(ENVIRONMENT)) --tail=$(or $(lines),20)
+	$(if $(filter true,$(follow)),@echo Press Ctrl + C to stop following logs...)
+	@$(MAKE) newline
+	@docker-compose logs $(or $(service),$(ENVIRONMENT)) --tail=$(or $(lines),20) $(if $(filter true,$(follow)),-f,)
 
 # View application logs (from logs/app.log)
 app-logs:
 	@echo Showing last $(or $(lines),20) lines of application logs...
+	@$(MAKE) newline
 	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/app.log
 
 # View error logs (from logs/errors.log)
 error-logs:
 	@echo Showing last $(or $(lines),20) lines of error logs...
+	@$(MAKE) newline
 	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/errors.log
 
 # View Django logs (from logs/django.log)
 django-logs:
 	@echo Showing last $(or $(lines),20) lines of Django logs...
+	@$(MAKE) newline
 	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/django.log
 
 
