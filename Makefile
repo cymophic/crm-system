@@ -93,7 +93,7 @@ build:
 # Display running containers
 status:
 	@echo Checking container status...
-	@docker-compose ps --format "table {{.ID}}\t{{.Service}}\t{{.Name}}\t{{.Status}}"
+	-@docker-compose ps --format "table {{.ID}}\t{{.Service}}\t{{.Name}}\t{{.Status}}" || echo Unable to check container status...
 
 # Restart containers
 restart:
