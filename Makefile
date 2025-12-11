@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 -include .env
 export ENVIRONMENT ?= dev
 
-.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test build-css manage.py celery-worker celery-status service-logs app-logs error-logs django-logs
+.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test build-css manage.py celery-worker celery-status service-logs app-logs error-logs django-logs newline
 
 # ------------------------------------
 # Setup Commands
@@ -12,38 +12,38 @@ export ENVIRONMENT ?= dev
 setup-dev:
 	@echo Setting up dev containers...
 	@$(MAKE) dev-build
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) migrate
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) build-css
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) restart
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) superuser
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) service-logs lines=13
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@echo Development environment setup complete!
 
 # Initial production environment
 setup-prod:
 	@echo Setting up production environment...
 	@$(MAKE) prod-build
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) migrate
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) build-css
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) collectstatic
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) restart
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) superuser
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) security-status
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) service-logs
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@echo Production setup complete!
 
 
@@ -232,3 +232,12 @@ error-logs:
 django-logs:
 	@echo Showing last $(or $(lines),20) lines of Django logs...
 	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/django.log
+
+
+# ------------------------------------
+# Utilities/Helpers
+# ------------------------------------
+
+# Print blank line (cross-platform)
+newline:
+	@uv run python -c "print()"
