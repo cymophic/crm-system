@@ -49,8 +49,14 @@ if not ADMIN_URL.endswith("/"):
 # ------------------------------------
 # URLs
 # ------------------------------------
+
+# Login/Logout
+LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = reverse_lazy("base:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("base:index")
+
+# Signup
+ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("base:index")  # django-allauth
 ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("base:index")  # django-allauth
 
 # ------------------------------------
