@@ -56,21 +56,6 @@
                 <!-- Logout Button -->
                 {% include 'buttons/text_button.html' with text='Need to use a different account?' button_type='submit' button_text='Log Out' confirm=True confirm_text='Any unsaved changes will be lost. Log out anyway?' %}
             </form>
-
-            <!-- Help Section -->
-            <div class="mt-8 pt-6 border-t border-(--border-default)">
-                <div class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-(--color-accent) text-base! mt-0.5">help</span>
-                    <div class="text-left">
-                        <p class="text-xs font-medium text-(--text-title) mb-1">
-                            {% trans "Can't find your team?" %}
-                        </p>
-                        <p class="text-xs text-(--text-body)">
-                            {% trans "If your team is not listed, please contact the IT helpdesk to have it added to the system." %}
-                        </p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 {% endblock %}
