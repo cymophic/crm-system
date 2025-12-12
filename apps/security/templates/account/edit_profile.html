@@ -20,6 +20,9 @@
 
                 <!-- Form Fields -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-5">
+                    <!-- Email Field -->
+                    {% include 'forms/text_input.html' with label=form.email.label help_text=form.email.help_text type='email' name=form.email.html_name id=form.email.id_for_label value=form.email.value has_error=form.email.errors error_message=form.email.errors.0 disabled=form.email.field.disabled %}
+
                     <!-- Username Field -->
                     {% include 'forms/text_input.html' with label=form.username.label help_text=form.username.field.widget.attrs.help_text name=form.username.html_name id=form.username.id_for_label value=form.username.value required=form.username.field.required has_error=form.username.errors error_message=form.username.errors.0 disabled=form.username.field.disabled %}
 
@@ -31,9 +34,6 @@
 
                     <!-- Job Title Field -->
                     {% include 'forms/text_input.html' with label=form.job_title.label name=form.job_title.html_name id=form.job_title.id_for_label required=form.job_title.field.required value=form.job_title.value has_error=form.job_title.errors error_message=form.job_title.errors.0 disabled=form.job_title.field.disabled %}
-
-                    <!-- Email Field -->
-                    {% include 'forms/text_input.html' with label=form.email.label help_text=form.email.help_text type='email' name=form.email.html_name id=form.email.id_for_label value=form.email.value has_error=form.email.errors error_message=form.email.errors.0 disabled=form.email.field.disabled %}
 
                     <!-- Phone Field -->
                     {% include 'forms/text_input.html' with label=form.phone.label help_text=form.phone.field.widget.attrs.help_text type='tel' name=form.phone.html_name id=form.phone.id_for_label value=form.phone.value required=form.phone.field.required has_error=form.phone.errors error_message=form.phone.errors.0 disabled=form.phone.field.disabled %}
