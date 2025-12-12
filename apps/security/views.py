@@ -27,11 +27,11 @@ class CompleteProfileView(LoginRequiredMixin, UpdateView):
         # If profile is already complete, redirect to dashboard
         user = request.user
         if user.is_profile_complete:
-            messages.info(request, "Your profile is already complete.")
+            messages.info(request, "Your profile is already complete")
             return redirect(reverse("analytics:dashboard"))
         else:
             # Toast message
-            messages.info(request, "Please complete your profile to continue.")
+            messages.info(request, "Please complete your profile to continue")
 
         return super().get(request, *args, **kwargs)
 
