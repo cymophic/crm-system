@@ -20,7 +20,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 - **Cache & Message Broker:** Redis
 - **Task Queue:** Celery
 - **Admin Interface:** Django Unfold
-- **Containerization:** Docker + Docker Compose
+- **Containerization:** Docker
 
 ---
 
@@ -90,7 +90,7 @@ crm-system/
 
 ### Prerequisites
 
-- **Docker** and **Docker Compose** - [Get Docker](https://docs.docker.com/get-docker/)
+- **Docker** - [Get Docker](https://docs.docker.com/get-docker/)
 - **Make** - Pre-installed on macOS/Linux, [Windows installation](https://gnuwin32.sourceforge.net/packages/make.htm)
 - **Python 3.13** and **uv** - [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
 
