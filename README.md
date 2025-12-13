@@ -20,7 +20,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 - **Cache & Message Broker:** Redis
 - **Task Queue:** Celery
 - **Admin Interface:** Django Unfold
-- **Containerization:** Docker + Docker Compose
+- **Containerization:** Docker
 
 ---
 
