@@ -16,6 +16,7 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 
 - **Frontend:** Tailwind CSS 4.x
 - **Backend:** Django 5.2.8+ (Python 3.13)
+- **Package Manager:** uv
 - **Database:** SQLite3 (dev) / PostgreSQL (prod)
 - **Cache & Message Broker:** Redis
 - **Task Queue:** Celery
