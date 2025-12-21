@@ -1,0 +1,20 @@
+{% load message_tags %}
+
+<div role="alert"
+     class="opacity-0 -translate-y-5 rounded-lg px-4 py-3 shadow-sm relative transition-all duration-300 ease-in-out {{ message.tags|message_classes }}"
+>
+    <div class="flex items-center">
+        {% include 'components/messages/icon.html' with tag=message.tags %}
+        
+        <div class="ml-3 flex-1 flex items-center">
+            <p class="text-xs sm:text-sm font-medium">{{ message }}</p>
+        </div>
+
+        <button type="button"
+            onclick="this.parentElement.parentElement.remove();"
+            class="ml-4 shrink-0 inline-flex focus:outline-none transition-colors duration-200 {{ message.tags|close_button_classes }}"
+            aria-label="Close Message">
+            <span class="material-symbols-outlined text-[20px]!">close</span>
+        </button>
+    </div>
+</div>

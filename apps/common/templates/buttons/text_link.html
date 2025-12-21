@@ -1,0 +1,8 @@
+<!-- Reusable Component: Text with Link -->
+
+<div class="mt-6 text-center">
+    <p class="text-sm text-(--text-title)">
+        {{ text }}
+        <a {% if id %}id="{{ id }}"{% endif %} href="{% url url %}" class="text-(--color-accent) hover:underline font-medium">{{ link_text }}</a>
+    </p>
+</div>

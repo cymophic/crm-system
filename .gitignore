@@ -12,13 +12,19 @@ media/
 staticfiles/
 collected_static/
 
-# Tailwind CLI Binary File
-tailwind/tailwindcss*
+# Tailwind
+static/css/tailwind/cli/tailwindcss*
+static/css/tailwind/dist/output.css
 
 # Database
 *.sqlite3
 *.sqlite3-journal
 db.sqlite3
+
+# Test Coverage
+htmlcov/
+.coverage
+.coverage.*
 
 # Logs
 *.log

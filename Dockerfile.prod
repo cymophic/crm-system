@@ -24,10 +24,20 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --group prod
 
 # Copy project code
-COPY . .
+COPY --chown=1000:1000 . .
+
+# Create non-root user
+RUN useradd -m -u 1000 user
+
+# Create required directories with correct ownership
+RUN mkdir -p /app/logs /app/staticfiles /app/media && \
+    chown -R user:user /app/logs /app/staticfiles /app/media
 
 # Expose Gunicorn port
 EXPOSE 8000
+
+# Switch to non-root user
+USER user
 
 # Run Gunicorn
 CMD ["uv", "run", "gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]

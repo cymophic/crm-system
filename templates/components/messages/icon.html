@@ -1,0 +1,26 @@
+<div class="shrink-0 flex items-center h-5">
+    <span class="material-symbols-outlined text-[20px]!
+        {% if tag == 'error' or tag == 'danger' %}
+            text-(--alert-error-icon)
+        {% elif tag == 'warning' %}
+            text-(--alert-warning-icon)
+        {% elif tag == 'success' %}
+            text-(--alert-success-icon)
+        {% elif tag == 'info' %}
+            text-(--alert-info-icon)
+        {% else %}
+            text-(--text-muted)
+        {% endif %}">
+        {% if tag == 'error' or tag == 'danger' %}
+            cancel
+        {% elif tag == 'warning' %}
+            warning
+        {% elif tag == 'success' %}
+            check_circle
+        {% elif tag == 'info' %}
+            info
+        {% else %}
+            info
+        {% endif %}
+    </span>
+</div>

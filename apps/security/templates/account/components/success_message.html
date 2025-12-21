@@ -1,0 +1,15 @@
+<!-- Reusable Component: Success Message with Icon -->
+
+<div class="text-center {{ margin_class|default:'mb-6' }}">
+    <div class="w-16 h-16 bg-(--alert-success-bg) rounded-full flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-(--alert-success-icon) text-2xl">
+            {{ icon|default:'task_alt' }}
+        </span>
+    </div>
+    <h2 class="text-lg font-semibold text-(--text-title) mb-2">
+        {{ title }}
+    </h2>
+    <p class="text-sm text-(--text-body) leading-relaxed">
+        {{ message }}
+    </p>
+</div>

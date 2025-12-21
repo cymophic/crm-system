@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 -include .env
 export ENVIRONMENT ?= dev
 
-.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test tailwind-build manage.py service-logs app-logs error-logs django-logs
+.PHONY: setup-dev setup-prod dev dev-build prod prod-build security-status build status down restart bash clean reset shell collectstatic superuser migrate migrations showmigrations check test build-css manage.py celery-worker celery-status service-logs app-logs error-logs django-logs newline
 
 # ------------------------------------
 # Setup Commands
@@ -12,36 +12,38 @@ export ENVIRONMENT ?= dev
 setup-dev:
 	@echo Setting up dev containers...
 	@$(MAKE) dev-build
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) migrate
-	@uv run python -c "print()"
+	@$(MAKE) newline
+	@$(MAKE) build-css
+	@$(MAKE) newline
 	@$(MAKE) restart
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) superuser
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) service-logs lines=13
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@echo Development environment setup complete!
 
 # Initial production environment
 setup-prod:
 	@echo Setting up production environment...
 	@$(MAKE) prod-build
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) migrate
-	@uv run python -c "print()"
-	@$(MAKE) tailwind-build
-	@uv run python -c "print()"
+	@$(MAKE) newline
+	@$(MAKE) build-css
+	@$(MAKE) newline
 	@$(MAKE) collectstatic
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) restart
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) superuser
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) security-status
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@$(MAKE) service-logs
-	@uv run python -c "print()"
+	@$(MAKE) newline
 	@echo Production setup complete!
 
 
@@ -91,7 +93,7 @@ build:
 # Display running containers
 status:
 	@echo Checking container status...
-	@docker-compose ps --format "table {{.ID}}\t{{.Service}}\t{{.Name}}\t{{.Status}}"
+	-@docker-compose ps --format "table {{.ID}}\t{{.Service}}\t{{.Name}}\t{{.Status}}" || echo Unable to check container status...
 
 # Restart containers
 restart:
@@ -183,7 +185,7 @@ test:
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py test
 
 # Build minified CSS for production
-tailwind-build:
+build-css:
 	@echo Building Tailwind CSS...
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py tailwind build --force
 
@@ -191,26 +193,56 @@ tailwind-build:
 manage.py:
 	@docker-compose exec $(ENVIRONMENT) uv run python manage.py $(cmd)
 
+
+# ------------------------------------
+# Task Management
+# ------------------------------------
+
+# Start Celery worker
+celery-worker:
+	@echo Starting Celery worker...
+	@docker-compose exec celery uv run celery -A config worker --loglevel=info
+
+# Check Celery status
+celery-status:
+	@echo Checking Celery worker status...
+	@docker-compose exec celery uv run celery -A config inspect ping
+
+
 # ------------------------------------
 # Log Management
 # ------------------------------------
 
-# Display all services output logs
+# Display services output logs
 service-logs:
-	@echo Showing last $(or $(lines),20) lines of service logs...
-	@docker-compose logs $(ENVIRONMENT) --tail=$(or $(lines),20)
+	@echo Showing last $(or $(lines),20) lines of $(or $(service),$(ENVIRONMENT)) logs...
+	$(if $(filter true,$(follow)),@echo Press Ctrl + C to stop following logs...)
+	@$(MAKE) newline
+	@docker-compose logs $(or $(service),$(ENVIRONMENT)) --tail=$(or $(lines),20) $(if $(filter true,$(follow)),-f,)
 
 # View application logs (from logs/app.log)
 app-logs:
 	@echo Showing last $(or $(lines),20) lines of application logs...
+	@$(MAKE) newline
 	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/app.log
 
 # View error logs (from logs/errors.log)
 error-logs:
 	@echo Showing last $(or $(lines),20) lines of error logs...
+	@$(MAKE) newline
 	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/errors.log
 
 # View Django logs (from logs/django.log)
 django-logs:
 	@echo Showing last $(or $(lines),20) lines of Django logs...
+	@$(MAKE) newline
 	@docker-compose exec $(ENVIRONMENT) tail -n $(or $(lines),20) logs/django.log
+
+
+# ------------------------------------
+# Utilities/Helpers
+# ------------------------------------
+
+# Print blank line (cross-platform)
+newline:
+	@uv run python -c "print()"

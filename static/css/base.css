@@ -1,0 +1,19 @@
+@import url('variables.css');
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: var(--font-family-system);
+
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}

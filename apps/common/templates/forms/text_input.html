@@ -1,0 +1,74 @@
+<!-- Reusable Component: Text Input Field -->
+
+<div class="flex flex-col group {{ margin_class }} {% if col_span == '2' %}lg:col-span-2{% elif col_span == '3' %}lg:col-span-3{% endif %}">
+    <div class="flex flex-col gap-2">
+        <!-- Label -->
+        <label for="{{ id }}" class="block font-semibold text-sm text-(--text-title)">
+            {{ label }}
+            {% if required %}
+                <span class="text-(--color-important)">
+                    *
+                </span>
+            {% endif %}
+        </label>
+
+        <!-- Input Field -->
+        <input
+            type="{{ type|default:'text' }}"
+            name="{{ name }}"
+            id="{{ id }}"
+            {% if value %}
+                value="{{ value }}"
+            {% endif %}
+            {% if placeholder %}
+                placeholder="{{ placeholder }}"
+            {% endif %}
+            {% if required %}
+                required
+            {% endif %}
+            {% if tabindex %}
+                tabindex="{{ tabindex }}"
+            {% endif %}
+            {% if disabled %}
+                disabled
+            {% endif %}
+            {% if maxlength %}
+                maxlength="{{ maxlength }}"
+            {% endif %}
+            {% if inputmode %}
+                inputmode="{{ inputmode }}"
+            {% endif %}
+            {% if pattern %}
+                pattern="{{ pattern }}"
+            {% endif %}
+            {% if autocomplete %}
+                autocomplete="{{ autocomplete }}"
+            {% endif %}
+            {% if autofocus %}
+                autofocus
+            {% endif %}
+            class="border font-medium min-w-20 px-3 py-2 w-full placeholder-base-400 rounded shadow-xs text-sm focus:outline-2 focus:-outline-offset-2
+                   {% if disabled %}
+                       text-(--text-muted) bg-(--bg-subtle) border-(--border-default) cursor-not-allowed
+                   {% elif has_error %}
+                       border-(--input-border-error) bg-(--input-bg-error) text-(--text-body)
+                   {% else %}
+                       border-(--border-default) bg-(--bg-surface) text-(--text-body) focus:outline-(--color-accent)
+                   {% endif %} {{ class }}"
+        >
+
+        <!-- Error Message -->
+        {% if error_message %}
+            <span class="text-(--text-error) text-xs">
+                {{ error_message }}
+            </span>
+        {% endif %}
+
+        <!-- Help Text -->
+        {% if help_text and not error_message %}
+            <span class="text-(--text-muted) text-xs">
+                {{ help_text|safe }}
+            </span>
+        {% endif %}
+    </div>
+</div>

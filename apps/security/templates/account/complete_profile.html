@@ -1,0 +1,61 @@
+{% extends "layouts/auth.html" %}
+{% load static i18n %}
+
+{% block title %}
+    Complete Your Profile
+{% endblock title %}
+
+{% block content %}
+    <div class="flex grow items-center justify-center mx-auto px-4 relative">
+        <div class="my-10 w-full sm:w-96">
+            <!-- Header -->
+            {% include 'account/components/form_header.html' with subtitle='Welcome!' title='Complete Your Profile' %}
+
+            <!-- Instructions -->
+            <div class="mb-6">
+                <p class="text-sm text-(--text-body)">
+                    {% trans "Please complete the following information to access your account and begin using the system." %}
+                </p>
+            </div>
+
+            <!-- Display Errors -->
+            {% include 'account/components/error_display.html' %}
+
+            <!-- Profile Completion Form -->
+            <form method="post" action="{% url 'security:complete_profile' %}">
+                {% csrf_token %}
+
+                <!-- Form Fields -->
+                <div class="grid grid-cols-1 gap-y-5">
+                    <!-- First Name Field -->
+                    {% include 'forms/text_input.html' with label=form.first_name.label placeholder=form.first_name.field.widget.attrs.placeholder help_text=form.first_name.field.widget.attrs.help_text name=form.first_name.html_name id=form.first_name.id_for_label value=form.first_name.value required=form.first_name.field.required has_error=form.first_name.errors error_message=form.first_name.errors.0 disabled=form.first_name.field.disabled %}
+
+                    <!-- Last Name Field -->
+                    {% include 'forms/text_input.html' with label=form.last_name.label placeholder=form.last_name.field.widget.attrs.placeholder help_text=form.last_name.field.widget.attrs.help_text name=form.last_name.html_name id=form.last_name.id_for_label value=form.last_name.value required=form.last_name.field.required has_error=form.last_name.errors error_message=form.last_name.errors.0 disabled=form.last_name.field.disabled %}
+
+                    <!-- Job Title Field -->
+                    {% include 'forms/text_input.html' with label=form.job_title.label placeholder=form.job_title.field.widget.attrs.placeholder help_text=form.job_title.field.widget.attrs.help_text name=form.job_title.html_name id=form.job_title.id_for_label value=form.job_title.value required=form.job_title.field.required has_error=form.job_title.errors error_message=form.job_title.errors.0 disabled=form.job_title.field.disabled %}
+
+                    <!-- Phone Field -->
+                    {% include 'forms/text_input.html' with label=form.phone.label placeholder=form.phone.field.widget.attrs.placeholder help_text=form.phone.field.widget.attrs.help_text type='tel' name=form.phone.html_name id=form.phone.id_for_label value=form.phone.value required=form.phone.field.required has_error=form.phone.errors error_message=form.phone.errors.0 disabled=form.phone.field.disabled %}
+                </div>
+
+                <div class="flex flex-col mt-10">
+                    <!-- Submit Button -->
+                    {% include 'buttons/primary.html' with text='Complete Profile' %}
+                </div>
+            </form>
+
+            <!-- Logout Form -->
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+                {% endif %}
+
+                <!-- Logout Button -->
+                {% include 'buttons/text_button.html' with text='Need to use a different account?' button_type='submit' button_text='Log Out' confirm=True confirm_text='Any unsaved changes will be lost. Log out anyway?' %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

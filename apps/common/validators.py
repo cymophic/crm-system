@@ -19,14 +19,14 @@ alphanumeric_validator = RegexValidator(
 # Validates URL-friendly slugs like "team-alpha-1".
 slug_validator = RegexValidator(
     regex=r"^[a-z0-9]+(?:-[a-z0-9]+)*$",
-    message=_("Use lowercase letters, numbers, and hyphens only."),
+    message=_("Use lowercase letters, numbers, and hyphen (') only."),
     code="invalid_slug",
 )
 
 # Validates human names (letters, spaces, hyphens, apostrophes, diacritics).
 human_name_validator = RegexValidator(
     regex=r"^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$",
-    message=_("Only letters, spaces, hyphens, and apostrophes are allowed."),
+    message=_("Only letters, spaces, hyphens (-), and apostrophes (') are allowed."),
     code="invalid_name",
 )
 
@@ -56,7 +56,9 @@ uuid_validator = RegexValidator(
 # Validates business/SKU-like codes (3–32 chars, uppercase letters, numbers, _ and -).
 sku_code_validator = RegexValidator(
     regex=r"^(?=.{3,32}$)[A-Z0-9_-]+$",
-    message=_("3–32 chars. Use uppercase letters, numbers, underscores, and hyphens."),
+    message=_(
+        "Must be 3 to 32 characters consisting of uppercase letters, numbers, underscores (_), and hyphens (-)."
+    ),
     code="invalid_sku_code",
 )
 

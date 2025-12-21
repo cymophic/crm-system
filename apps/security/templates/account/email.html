@@ -1,0 +1,144 @@
+{% extends "layouts/auth.html" %}
+{% load static i18n %}
+
+{% block title %}
+    Email Settings
+{% endblock title %}
+
+{% block content %}
+    <div class="flex grow items-center justify-center mx-auto px-4 relative">
+        <div class="my-10 w-full sm:w-96">
+            <!-- Header -->
+            {% include 'account/components/form_header.html' with subtitle='Account Security' title='Email Addresses' %}
+
+            <!-- Instructions -->
+            <div class="mb-6">
+                <p class="text-sm text-(--text-body)">
+                    {% trans "The following email addresses are associated with your account:" %}
+                </p>
+            </div>
+
+            <!-- Display Errors -->
+            {% include 'account/components/error_display.html' %}
+
+            <!-- Email Management Form -->
+            {% if emailaddresses %}
+                <form method="post" action="{% url 'account_email' %}">
+                    {% csrf_token %}
+
+                    <!-- Email List with Radio Buttons -->
+                    <div class="space-y-3 mb-6">
+                        {% for radio in emailaddress_radios reversed %}
+                            {% with emailaddress=radio.emailaddress %}
+                                <div class="flex items-start gap-3 p-4 border border-(--border-default) rounded-lg bg-(--bg-surface)">
+                                    <!-- Radio Button -->
+                                    <input
+                                        type="radio"
+                                        name="email"
+                                        value="{{ emailaddress.email }}"
+                                        id="{{ radio.id }}"
+                                        {% if radio.checked %}checked{% endif %}
+                                        class="mt-0.5 h-4 w-4 text-(--color-accent) focus:ring-(--color-accent) border-(--border-strong) rounded"
+                                    >
+
+                                    <!-- Email Info -->
+                                    <div class="flex-1">
+                                        <label for="{{ radio.id }}" class="block text-sm font-medium text-(--text-title) cursor-pointer">
+                                            {{ emailaddress.email }}
+                                        </label>
+
+                                        <!-- Status Badges -->
+                                        <div class="flex items-center gap-2 mt-1">
+                                            {% if emailaddress.verified %}
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-(--alert-success-bg) text-(--alert-success-text)">
+                                                    <span class="material-symbols-outlined text-xs!">check_circle</span>
+                                                    {% trans "Verified" %}
+                                                </span>
+                                            {% else %}
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-(--alert-warning-bg) text-(--alert-warning-text)">
+                                                    <span class="material-symbols-outlined text-xs!">pending</span>
+                                                    {% trans "Unverified" %}
+                                                </span>
+                                            {% endif %}
+                                            {% if emailaddress.primary %}
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-(--bg-subtle) text-(--text-body)">
+                                                    <span class="material-symbols-outlined text-xs!">star</span>
+                                                    {% trans "Primary" %}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                        {% include 'buttons/primary.html' with text='Make Primary' name='action_primary' class='flex-1' %}
+                        {% include 'buttons/secondary.html' with text='Verify' name='action_send' type='submit' class='flex-1 hidden' id='resend-button' %}
+                        {% include 'buttons/danger.html' with text='Remove' name='action_remove' onclick="return confirm('Do you really want to remove the selected email address?')" type='submit' class='flex-1' %}
+                    </div>
+                </form>
+            {% else %}
+                <!-- No Emails Warning -->
+                <div class="p-4 border border-(--alert-warning-border) rounded-lg bg-(--alert-warning-bg) mb-6">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-(--alert-warning-icon) text-base! mt-0.5">warning</span>
+                        <div class="text-left">
+                            <p class="text-xs font-medium text-(--alert-warning-text) mb-1">
+                                {% trans "No email address set up" %}
+                            </p>
+                            <p class="text-xs text-(--alert-warning-text)">
+                                {% trans "You should add an email address for password recovery and notifications." %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Add Email Form -->
+            {% if can_add_email %}
+                <div class="border-t border-(--border-default) pt-6">
+                    <form method="post" action="{% url 'account_email' %}">
+                        {% csrf_token %}
+
+                        <!-- Form Fields -->
+                        <div class="grid grid-cols-1 gap-y-5">
+                            <!-- Email Field -->
+                            {% include 'forms/text_input.html' with label=form.email.label type='email' name=form.email.html_name id=form.email.id_for_label value=form.email.value required=form.email.field.required has_error=form.email.errors error_message=form.email.errors.0 %}
+                        </div>
+
+                        <div class="flex flex-col gap-3 mt-6">
+                            <!-- Submit Button -->
+                            {% include 'buttons/primary.html' with text='Add Email' name='action_add' type='submit' %}
+
+                            <!-- Back to Dashboard -->
+                            {% url 'base:index' as index_url %}
+                            {% include 'buttons/secondary_link.html' with text='Back' url=index_url onclick="if (history.length > 1) { history.back(); } else { window.location.href = '{{ index_url }}'; }" %}
+                        </div>
+
+                        <!-- Email Verification Info -->
+                        <div class="mt-6 pt-6 border-t border-(--border-default)">
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-(--color-accent) text-base! mt-0.5">verified</span>
+                                <div class="text-left">
+                                    <p class="text-xs font-medium text-(--text-title) mb-1">
+                                        {% trans "Why verify your email?" %}
+                                    </p>
+                                    <p class="text-xs text-(--text-body)">
+                                        {% trans "Verified emails are required for password recovery and important account notifications." %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/email/email-management.js' %}" type="module"></script>
+{% endblock %}

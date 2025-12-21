@@ -1,0 +1,37 @@
+{% load static %}
+
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center gap-4">
+            <a class="block text-(--color-accent) shrink-0" href="/">
+                <span class="sr-only">Home</span>
+                <img src="{% static 'logos/logo-light.svg' %}" class="h-10 w-auto rounded-lg" alt="Logo">
+            </a>
+        </div>
+
+        <!-- Desktop Navigation Items -->
+        {% if user.is_authenticated %}
+            {% include 'components/navbar/desktop.html' %}
+        {% endif %}
+
+        <!-- Account Buttons -->
+        <div class="flex items-center gap-4">
+            {% if user.is_authenticated %}
+                <!-- Mobile Menu Toggle Button -->
+                <button id="mobile-menu-button" class="block md:hidden cursor-pointer select-none">
+                    <span class="sr-only">Open Menu</span>
+                    <span class="material-symbols-outlined text-xl! text-(--text-body) my-1.5">menu</span>
+                </button>
+
+                <!-- User Menu -->
+                {% include 'components/navbar/menu.html' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Navigation Menu -->
+{% if user.is_authenticated %}
+    {% include 'components/navbar/mobile.html' %}
+{% endif %}

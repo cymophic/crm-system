@@ -1,0 +1,57 @@
+{% extends "layouts/auth.html" %}
+{% load static i18n %}
+
+{% block title %}
+    Edit Profile
+{% endblock title %}
+
+{% block content %}
+    <div class="flex grow items-center justify-center mx-auto px-4 relative">
+        <div class="my-10 w-full lg:w-[640px] xl:w-[720px]">
+            <!-- Header -->
+            {% include 'account/components/form_header.html' with subtitle='Account Settings' title='Edit Profile' %}
+
+            <!-- Display Errors -->
+            {% include 'account/components/error_display.html' %}
+
+            <!-- Edit Profile Form -->
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Form Fields -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-5">
+                    <!-- Email Field -->
+                    {% include 'forms/text_input.html' with label=form.email.label help_text=form.email.help_text type='email' name=form.email.html_name id=form.email.id_for_label value=form.email.value has_error=form.email.errors error_message=form.email.errors.0 disabled=form.email.field.disabled %}
+
+                    <!-- Username Field -->
+                    {% include 'forms/text_input.html' with label=form.username.label help_text=form.username.field.widget.attrs.help_text name=form.username.html_name id=form.username.id_for_label value=form.username.value required=form.username.field.required has_error=form.username.errors error_message=form.username.errors.0 disabled=form.username.field.disabled %}
+
+                    <!-- First Name Field -->
+                    {% include 'forms/text_input.html' with label=form.first_name.label name=form.first_name.html_name id=form.first_name.id_for_label value=form.first_name.value required=form.first_name.field.required has_error=form.first_name.errors error_message=form.first_name.errors.0 disabled=form.first_name.field.disabled %}
+
+                    <!-- Last Name Field -->
+                    {% include 'forms/text_input.html' with label=form.last_name.label name=form.last_name.html_name id=form.last_name.id_for_label value=form.last_name.value required=form.last_name.field.required has_error=form.last_name.errors error_message=form.last_name.errors.0 disabled=form.last_name.field.disabled %}
+
+                    <!-- Job Title Field -->
+                    {% include 'forms/text_input.html' with label=form.job_title.label name=form.job_title.html_name id=form.job_title.id_for_label required=form.job_title.field.required value=form.job_title.value has_error=form.job_title.errors error_message=form.job_title.errors.0 disabled=form.job_title.field.disabled %}
+
+                    <!-- Phone Field -->
+                    {% include 'forms/text_input.html' with label=form.phone.label help_text=form.phone.field.widget.attrs.help_text type='tel' name=form.phone.html_name id=form.phone.id_for_label value=form.phone.value required=form.phone.field.required has_error=form.phone.errors error_message=form.phone.errors.0 disabled=form.phone.field.disabled %}
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-3 lg:gap-y-5 mt-10">
+                    <!-- Submit Button -->
+                    <div class="order-1 lg:order-2">
+                        {% include 'buttons/primary.html' with text='Save Changes' %}
+                    </div>
+
+                    <!-- Back to Dashboard -->
+                    <div class="order-2 lg:order-1">
+                        {% url 'base:index' as index_url %}
+                        {% include 'buttons/secondary_link.html' with text='Back' url=index_url onclick="if (history.length > 1) { history.back(); } else { window.location.href = '{{ index_url }}'; }" %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,87 @@
+:root {
+    /* Typography */
+    --font-family-system:
+        -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter',
+        sans-serif;
+    --font-family-monospace: 'SF Mono', Consolas, 'Courier New', monospace;
+
+    /* Text Colors */
+    --text-title: #111827;
+    --text-body: #4b5563;
+    --text-muted: #9ca3af;
+    --text-on-accent: #ffffff;
+    --text-error: #dc2626;
+    --text-link: #2563eb;
+    --text-link-muted: #7c8793;
+
+    /* Background Colors */
+    --bg-page: #ffffff;
+    --bg-surface: #ffffff;
+    --bg-surface-hover: #f9fafb;
+    --bg-subtle: #f3f4f6;
+
+    /* Border Colors */
+    --border-default: #e5e5e5;
+    --border-subtle: #f5f5f5;
+    --border-strong: #d4d4d4;
+
+    /* Button - Primary */
+    --button-primary-bg: #111827;
+    --button-primary-bg-hover: rgba(17, 24, 39, 0.9);
+    --button-primary-text: #ffffff;
+
+    /* Button - Secondary */
+    --button-secondary-bg: #ffffff;
+    --button-secondary-text: #111827;
+    --button-secondary-border: #d4d4d4;
+
+    /* Button - Danger */
+    --button-danger-text: #ef4444;
+    --button-danger-bg-hover: #fee2e2;
+
+    /* Form Inputs */
+    --input-bg: #ffffff;
+    --input-border: #e5e5e5;
+    --input-border-error: #fca5a5;
+    --input-bg-error: #fef2f2;
+
+    /* Messages/Alerts - Error */
+    --alert-error-bg: #fef2f2;
+    --alert-error-border: #fecaca;
+    --alert-error-text: #991b1b;
+    --alert-error-icon: #f87171;
+
+    /* Messages/Alerts - Success */
+    --alert-success-bg: #ebfff1;
+    --alert-success-border: #bbf7d0;
+    --alert-success-text: #166534;
+    --alert-success-icon: #32d46d;
+
+    /* Messages/Alerts - Warning */
+    --alert-warning-bg: #fefce8;
+    --alert-warning-border: #fef08a;
+    --alert-warning-text: #854d0e;
+    --alert-warning-icon: #facc15;
+
+    /* Messages/Alerts - Info */
+    --alert-info-bg: #eff6ff;
+    --alert-info-border: #bfdbfe;
+    --alert-info-text: #1e40af;
+    --alert-info-icon: #60a5fa;
+
+    /* Messages/Alerts - Default */
+    --alert-default-bg: #f9fafb;
+    --alert-default-border: #e5e7eb;
+    --alert-default-text: #1f2937;
+    --alert-default-icon: #9ca3af;
+
+    /* Navigation */
+    --nav-text: #6b7280;
+    --nav-text-hover: rgba(107, 114, 128, 0.75);
+    --nav-dropdown-bg: #ffffff;
+    --nav-dropdown-hover: #f5f5f5;
+
+    /* Special */
+    --color-accent: #525252;
+    --color-important: #e03535;
+}

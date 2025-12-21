@@ -1,0 +1,35 @@
+<!-- Reusable Component: Primary Button -->
+
+<button
+    {% if id %}id="{{ id }}"{% endif %}
+    type="{{ type|default:'submit' }}"
+    {% if name %}name="{{ name }}"{% endif %}
+    {% if tabindex %}tabindex="{{ tabindex }}"{% endif %}
+    {% if onclick %}onclick="{{ onclick }}"{% endif %}
+    {% if disabled %}disabled{% endif %}
+    class="{{ class|default:'w-full' }} font-medium flex group items-center gap-2 px-4 py-2 rounded justify-center whitespace-nowrap cursor-pointer border border-transparent bg-(--button-primary-bg) text-white hover:bg-(--button-primary-bg)/90 transition-colors text-sm
+           {% if disabled %}
+               opacity-50 cursor-not-allowed pointer-events-none
+           {% endif %}"
+>
+    <!-- Left Icon -->
+    {% if icon_left %}
+        <span class="material-symbols-outlined text-sm!">
+            {{ icon_left }}
+        </span>
+    {% endif %}
+
+    <!-- Button Text -->
+    {{ text }}
+
+    <!-- Right Icon -->
+    {% if icon_right %}
+        <span class="material-symbols-outlined text-sm!
+                     {% if animate_right %}
+                         relative right-0 transition-all group-hover:-right-1
+                     {% endif %}"
+        >
+            {{ icon_right }}
+        </span>
+    {% endif %}
+</button>

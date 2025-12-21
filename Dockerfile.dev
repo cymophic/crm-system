@@ -8,6 +8,9 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Create folder and set as working directory
 WORKDIR /app
 
+# Create non-root user
+RUN useradd -m -u 1000 user && chown -R user:user /app
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -26,5 +29,8 @@ RUN uv sync --frozen --group dev
 # Expose development server port
 EXPOSE 8000
 
+# Switch to non-root user
+USER user
+
 # Run Django development server with Tailwind watch
-CMD ["uv", "run", "python", "manage.py", "tailwind", "runserver", "0.0.0.0:8000"]
+CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

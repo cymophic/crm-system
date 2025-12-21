@@ -1,0 +1,4 @@
+{% load i18n %}
+{% blocktrans %}
+    Phone number successfully verified
+{% endblocktrans %}

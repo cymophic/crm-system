@@ -6,8 +6,10 @@ description = "A comprehensive customer relationship management (CRM) system bui
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "celery[redis]>=5.6.0",
     "dj-database-url>=3.0.1",
     "django>=5.2.8",
+    "django-allauth>=65.13.1",
     "django-csp>=4.0",
     "django-currentuser>=0.9.0",
     "django-money>=3.5.4",
@@ -21,6 +23,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "coverage>=7.13.0",
     "faker>=38.2.0",
 ]
 prod = [

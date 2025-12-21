@@ -2,8 +2,11 @@ from pathlib import Path
 
 from csp.constants import NONE, SELF
 from decouple import Csv, config
+from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+
+from config.constants import SYSTEM_FULL_NAME, SYSTEM_NAME
 
 # ------------------------------------
 # Base Directory
@@ -20,12 +23,17 @@ CONTENT_SECURITY_POLICY = {
         "default-src": [SELF],
         "script-src": [
             SELF,
+            "https://fonts.googleapis.com",
+            "https://cdnjs.cloudflare.com",
             "'unsafe-inline'",
             "'unsafe-eval'",
         ],
-        "style-src": [SELF, "'unsafe-inline'"],
+        "style-src": [SELF, "https://fonts.googleapis.com", "'unsafe-inline'"],
         "img-src": [SELF, "data:"],
-        "font-src": [SELF],
+        "font-src": [
+            SELF,
+            "https://fonts.gstatic.com",
+        ],
         "connect-src": [SELF],
         "frame-ancestors": [NONE],
     },
@@ -39,6 +47,19 @@ if not ADMIN_URL.endswith("/"):
     ADMIN_URL += "/"
 
 # ------------------------------------
+# URLs
+# ------------------------------------
+
+# Login/Logout
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = reverse_lazy("base:index")
+LOGOUT_REDIRECT_URL = reverse_lazy("base:index")
+
+# Signup
+ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("base:index")  # django-allauth
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("base:index")  # django-allauth
+
+# ------------------------------------
 # Database
 # ------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -50,11 +71,15 @@ INSTALLED_APPS = [
     # Initial Apps
     "django.contrib.sites",
     # Project Apps
+    "apps.base",
+    "apps.analytics",
     "apps.common",
     "apps.security",
     "apps.users",
     # Third-party Packages
     "unfold",
+    "allauth",
+    "allauth.account",
     "django_tailwind_cli",
     "phonenumber_field",
     "djmoney",
@@ -82,6 +107,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",  # django-allauth
     "django_currentuser.middleware.ThreadLocalUserMiddleware",  # django-currentuser
 ]
 
@@ -113,6 +139,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # ------------------------------------
+# Cache
+# ------------------------------------
+REDIS_URL = config("REDIS_URL", default="redis://redis:6379/0")
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+    }
+}
+
+# ------------------------------------
 # Sessions
 # ------------------------------------
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -131,6 +169,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "config.context_processors.site_constants",  # project-constants
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -168,7 +207,7 @@ FORMAT_MODULE_PATH = [
 ]
 
 # Phone Numbers
-PHONENUMBER_DEFAULT_REGION = None  # django-phonenumber-field
+PHONENUMBER_DEFAULT_REGION = "PH"  # django-phonenumber-field
 
 # Currency
 CURRENCIES = ("PHP", "USD")  # django-money
@@ -188,7 +227,7 @@ EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-DEFAULT_FROM_EMAIL = f"CRM System <{EMAIL_HOST_USER}>"
+DEFAULT_FROM_EMAIL = f"{SYSTEM_NAME} <{EMAIL_HOST_USER}>"
 
 # Email Recipients
 EMAIL_HELPDESK = config("EMAIL_HELPDESK", default="", cast=Csv())
@@ -280,9 +319,9 @@ LOGGING = {
 # Unfold Admin Configuration
 # ------------------------------------
 UNFOLD = {
-    "SITE_TITLE": "CRM Admin",
-    "SITE_HEADER": "CRM Admin",
-    "SITE_SUBHEADER": "Customer Relationship Management System",
+    "SITE_TITLE": f"{SYSTEM_NAME} Admin",
+    "SITE_HEADER": f"{SYSTEM_NAME} Admin",
+    "SITE_SUBHEADER": f"{SYSTEM_FULL_NAME}",
     "THEME": "light",
     "SITE_URL": "/",
     "COLORS": {
@@ -354,7 +393,60 @@ UNFOLD = {
 # ------------------------------------
 # Django Tailwind CLI Configuration
 # ------------------------------------
-TAILWIND_CLI_PATH = "tailwind"
-TAILWIND_CLI_SRC_CSS = BASE_DIR / "tailwind" / "input.css"
-TAILWIND_CLI_DIST_CSS = "css/output.css"
+TAILWIND_CLI_PATH = "static/css/tailwind/cli/"
+TAILWIND_CLI_SRC_CSS = "static/css/tailwind/src/input.css"
+TAILWIND_CLI_DIST_CSS = "css/tailwind/dist/output.css"
 TAILWIND_CLI_ARGS = "--minify"
+
+# ------------------------------------
+# Allauth Integration Settings
+# ------------------------------------
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SITE_ID = 1
+
+ACCOUNT_SIGNUP_FIELDS = [  # (*) indicates required fields
+    "email*",
+    "username",
+    "password1*",
+    "password2*",
+]
+
+ACCOUNT_EMAIL_VERIFICATION = "none"  # mandatory / optional / none
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+ACCOUNT_RATE_LIMITS = {
+    "login_failed": "5/5m",  # 5 failed login attempts per 5 minutes
+    "login": "20/h",  # Max 20 total login attempts per hour
+    "signup": "3/d",  # 3 signups per IP per day
+    "confirm_email": "1/3m/key",  # 1 confirmation email every 3 minutes per email address
+    "reset_password": "5/d/ip",  # 5 password reset requests per IP per day
+    "reset_password_from_key": "20/d/key",  # 20 password reset submissions per reset link per day
+    "change_password": "5/m/user",  # 5 password changes per user per minute
+    "manage_email": "10/m/user",  # 10 email add/remove actions per user per minute
+}
+ACCOUNT_LOGIN_METHODS = ["email"]
+ACCOUNT_SESSION_REMEMBER = None
+
+ACCOUNT_FORMS = {
+    "login": "apps.security.forms.LoginForm",
+    "signup": "apps.security.forms.SignupForm",
+    "change_password": "apps.security.forms.ChangePasswordForm",
+    "reset_password": "apps.security.forms.ResetPasswordForm",
+    "reset_password_from_key": "apps.security.forms.ResetPasswordKeyForm",
+    "add_email": "apps.security.forms.AddEmailForm",
+}
+
+# ------------------------------------
+# Celery Configuration
+# ------------------------------------
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes

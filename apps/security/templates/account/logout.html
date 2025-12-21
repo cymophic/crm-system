@@ -1,0 +1,45 @@
+{% extends "layouts/auth.html" %}
+{% load static i18n %}
+
+{% block title %}
+    Logout
+{% endblock title %}
+
+{% block content %}
+    <div class="my-10 flex grow items-center justify-center mx-auto px-4 relative">
+        <div class="text-center">
+            <div class="mb-6">
+                <!-- Header -->
+                <h2 class="text-lg font-semibold text-(--text-title) mb-2">
+                    {% trans "Log out of your account?" %}
+                </h2>
+                <p class="text-sm text-(--text-body)">
+                    {% trans "You are about to be signed out. Are you sure you want to continue?" %}
+                </p>
+            </div>
+
+            <!-- Logout Form -->
+            <form method="post" action="{% url 'account_logout' %}" class="space-y-4">
+                {% csrf_token %}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+                {% endif %}
+
+                <div class="flex flex-col-reverse sm:flex-row gap-3">
+                    <!-- Cancel Button -->
+                    {% include 'buttons/secondary.html' with text='Cancel' onclick='window.history.back()' class='flex-1' %}
+
+                    <!-- Logout Button -->
+                    {% include 'buttons/primary.html' with text='Log Out' type='submit' class='flex-1' %}
+                </div>
+            </form>
+
+            <!-- Additional Info -->
+            <div class="pt-6">
+                <p class="text-xs text-(--text-body)">
+                    {% trans "Don't worry, you can always sign back in anytime." %}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

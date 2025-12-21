@@ -26,7 +26,7 @@ class UserAdminForm(forms.ModelForm):
         if "phone" in self.fields:
             self.fields["phone"].error_messages[
                 "invalid"
-            ] = "Use the local format (e.g., 09XX XXX XXXX) or include the country code (e.g., +63 XXX XXX XXXX)"
+            ] = "Enter a valid phone number"
 
     def clean_email(self):
         email = self.cleaned_data.get("email")

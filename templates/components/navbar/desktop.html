@@ -1,0 +1,74 @@
+<div class="hidden md:block">
+    <nav aria-label="Global">
+        <ul class="flex items-center gap-12 text-sm">
+            <!-- Dashboard -->
+            <li>
+                <a class="text-(--text-body) transition hover:text-(--text-body)/75" href="{% url 'analytics:dashboard' %}">
+                    Dashboard
+                </a>
+            </li>
+
+            <!-- Clients -->
+            <li class="block relative">
+                <a data-dropdown-trigger="clients-menu" class="cursor-pointer select-none text-(--text-body) transition hover:text-(--text-body)/75">
+                    Clients
+                </a>
+                <div id="clients-menu" data-dropdown-menu class="absolute hidden bg-(--bg-surface) border border-(--border-default) flex-col leading-none py-1 rounded-lg shadow-lg top-8 w-36 z-50 left-1/2 -translate-x-1/2">
+                    <div class="pt-px pb-px space-y-1">
+                        <div class="border-b border-(--border-default) mb-1 pb-1">
+                            {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='View Clients' %}
+                        </div>
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='POCs' %}
+                    </div>
+                </div>
+            </li>
+
+            <!-- Projects -->
+            <li class="block relative">
+                <a data-dropdown-trigger="projects-menu" class="cursor-pointer select-none text-(--text-body) transition hover:text-(--text-body)/75">
+                    Projects
+                </a>
+                <div id="projects-menu" data-dropdown-menu class="absolute hidden bg-(--bg-surface) border border-(--border-default) flex-col leading-none py-1 rounded-lg shadow-lg top-8 w-36 z-50 left-1/2 -translate-x-1/2">
+                    <div class="pt-px pb-px space-y-1">
+                        <div class="border-b border-(--border-default) mb-1 pb-1">
+                            {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='View Projects' %}
+                        </div>
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='Activities' %}
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='QA Logs' %}
+                    </div>
+                </div>
+            </li>
+
+            <!-- Sales -->
+            <li class="block relative">
+                <a data-dropdown-trigger="sales-menu" class="cursor-pointer select-none text-(--text-body) transition hover:text-(--text-body)/75">
+                    Sales
+                </a>
+                <div id="sales-menu" data-dropdown-menu class="absolute hidden bg-(--bg-surface) border border-(--border-default) flex-col leading-none py-1 rounded-lg shadow-lg top-8 w-36 z-50 left-1/2 -translate-x-1/2">
+                    <div class="pt-px pb-px space-y-1">
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='Accounts' %}
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='Leads' %}
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='Opportunities' %}
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='Events' %}
+                    </div>
+                </div>
+            </li>
+
+            <!-- Solutions -->
+            <li class="block relative">
+                <a data-dropdown-trigger="solutions-menu" class="cursor-pointer select-none text-(--text-body) transition hover:text-(--text-body)/75">
+                    Solutions
+                </a>
+                <div id="solutions-menu" data-dropdown-menu class="absolute hidden bg-(--bg-surface) border border-(--border-default) flex-col leading-none py-1 rounded-lg shadow-lg top-8 w-36 z-50 left-1/2 -translate-x-1/2">
+                    <div class="pt-px pb-px space-y-1">
+                        <div class="border-b border-(--border-default) mb-1 pb-1">
+                            {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='View Solutions' %}
+                        </div>
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='Vendors' %}
+                        {% include 'dropdown/navbar/desktop/item.html' with url='analytics:dashboard' text='POCs' %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</div>

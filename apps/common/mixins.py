@@ -10,7 +10,9 @@ class AuditMixin(models.Model):
         verbose_name="Created At", auto_now_add=True, db_index=True
     )
     created_by = CurrentUserField(
-        verbose_name="Created By", related_name="%(app_label)s_%(class)s_created_by"
+        verbose_name="Created By",
+        related_name="%(app_label)s_%(class)s_created_by",
+        db_index=True,
     )
     updated_at = models.DateTimeField(
         verbose_name="Last Updated At", auto_now=True, db_index=True
@@ -18,6 +20,7 @@ class AuditMixin(models.Model):
     updated_by = CurrentUserField(
         verbose_name="Last Updated By",
         related_name="%(app_label)s_%(class)s_updated_by",
+        db_index=True,
     )
 
     class Meta:
@@ -32,6 +35,7 @@ class SoftDeleteMixin(models.Model):
     deleted_by = CurrentUserField(
         verbose_name="Deleted By",
         related_name="%(app_label)s_%(class)s_deleted_by",
+        db_index=True,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

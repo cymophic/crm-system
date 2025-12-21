@@ -1,0 +1,63 @@
+{% extends "layouts/auth.html" %}
+{% load static i18n %}
+
+{% block title %}
+    Sign Up
+{% endblock title %}
+
+{% block content %}
+    <div class="flex grow items-center justify-center mx-auto px-4 relative">
+        <div class="my-10 w-full sm:w-96">
+            <!-- Header -->
+            {% include 'account/components/form_header.html' with subtitle='Welcome to' title=SYSTEM_NAME %}
+
+            <!-- Display Errors -->
+            {% include 'account/components/error_display.html' %}
+
+            <!-- Sign Up Form -->
+            <form action="{% url 'account_signup' %}" method="post">
+                {% csrf_token %}
+
+                <!-- Form Fields -->
+                <div class="grid grid-cols-1 gap-y-5">
+                    <!-- Username Field -->
+                    {% include 'forms/text_input.html' with label=form.username.label name=form.username.html_name id=form.username.id_for_label value=form.username.value required=form.username.field.required has_error=form.username.errors error_message=form.username.errors.0 help_text=form.username.help_text autocomplete=form.username.field.widget.attrs.autocomplete %}
+
+                    <!-- Email Field -->
+                    {% include 'forms/text_input.html' with label=form.email.label type='email' name=form.email.html_name id=form.email.id_for_label value=form.email.value required=form.email.field.required has_error=form.email.errors error_message=form.email.errors.0 help_text=form.email.help_text autocomplete=form.email.field.widget.attrs.autocomplete %}
+
+                    <!-- Password Field -->
+                    {% include 'forms/password_input.html' with label=form.password1.label name=form.password1.html_name id=form.password1.id_for_label required=form.password1.field.required has_error=form.password1.errors error_message=form.password1.errors.0 autocomplete=form.password1.field.widget.attrs.autocomplete %}
+
+                    <!-- Confirm Password Field -->
+                    {% include 'forms/password_input.html' with label=form.password2.label name=form.password2.html_name id=form.password2.id_for_label required=form.password2.field.required has_error=form.password2.errors error_message=form.password2.errors.0 autocomplete=form.password2.field.widget.attrs.autocomplete %}
+                </div>
+
+                <!-- Password Requirements -->
+                <div class="bg-(--bg-subtle) border border-(--border-default) rounded-lg p-4 mt-5 mb-4">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-(--color-accent) text-base! mt-0.5">info</span>
+                        <div class="text-left">
+                            <p class="text-xs font-medium text-(--text-title) mb-1">
+                                {% trans "Password Requirements" %}
+                            </p>
+                            <ul class="text-xs text-(--text-body) space-y-1">
+                                <li>• {% trans "At least 8 characters long" %}</li>
+                                <li>• {% trans "Can't be too similar to your username" %}</li>
+                                <li>• {% trans "Can't be a commonly used password" %}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex flex-col gap-3 mt-5">
+                    {% include 'buttons/primary.html' with text='Sign Up' icon_right='arrow_forward' animate_right=True %}
+                </div>
+            </form>
+
+            <!-- Login Link -->
+            {% include 'buttons/text_link.html' with text='Already have an account?' url='account_login' link_text='Log In' %}
+        </div>
+    </div>
+{% endblock %}

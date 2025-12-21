@@ -1,0 +1,45 @@
+{% extends "layouts/auth.html" %}
+{% load static i18n %}
+
+{% block title %}
+    Log In
+{% endblock title %}
+
+{% block content %}
+    <div class="flex grow items-center justify-center mx-auto px-4 relative">
+        <div class="my-10 w-full sm:w-96">
+            <!-- Header -->
+            {% include 'account/components/form_header.html' with subtitle='Welcome back to' title=SYSTEM_NAME %}
+
+            <!-- Display Errors -->
+            {% include 'account/components/error_display.html' %}
+
+            <!-- Login Form -->
+            <form action="{% url 'account_login' %}" id="login-form" method="post">
+                {% csrf_token %}
+
+                <!-- Form Fields -->
+                <div class="grid grid-cols-1 gap-y-5">
+                    <!-- Email Field -->
+                    {% include 'forms/text_input.html' with label=form.login.label type='email' name=form.login.html_name id=form.login.id_for_label value=form.login.value required=form.login.field.required has_error=form.login.errors tabindex='1' %}
+
+                    <!-- Password Field -->
+                    {% include 'forms/password_input.html' with label=form.password.label name=form.password.html_name id=form.password.id_for_label required=form.password.field.required has_error=form.password.errors forgot_password_url='account_reset_password' tabindex='2' %}
+
+                    <!-- Remember Me Checkbox -->
+                    {% if form.remember %}
+                        {% include 'forms/checkbox.html' with label='Remember me' name=form.remember.html_name id=form.remember.id_for_label checked=form.remember.value %}
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex flex-col gap-3 mt-6">
+                    {% include 'buttons/primary.html' with text='Log In' icon_right='arrow_forward' animate_right=True tabindex='3' %}
+                </div>
+
+                <!-- Sign Up Link -->
+                {% include 'buttons/text_link.html' with text="Don't have an account?" url='account_signup' link_text='Sign Up' %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

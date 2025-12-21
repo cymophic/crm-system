@@ -1,0 +1,15 @@
+{% load static %}
+
+<div class="border-b border-b-(--border-default) mb-8 pb-6">
+    <div class="flex items-center gap-4">
+        <img src="{% static 'logos/logo-light.svg' %}" class="h-12 w-auto rounded-lg" alt="Logo">
+        <h1 class="font-semibold">
+            <span class="block text-sm text-(--text-title)">
+                {{ subtitle }}
+            </span>
+            <span class="block font-semibold text-(--color-accent) tracking-tight text-xl">
+                {{ title }}
+            </span>
+        </h1>
+    </div>
+</div>

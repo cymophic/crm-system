@@ -16,10 +16,12 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 
 - **Frontend:** Tailwind CSS 4.x
 - **Backend:** Django 5.2.8+ (Python 3.13)
+- **Package Manager:** uv
 - **Database:** SQLite3 (dev) / PostgreSQL (prod)
-- **Cache:** Local Memory Cache (dev) / Redis (prod)
+- **Cache & Message Broker:** Redis
+- **Task Queue:** Celery
 - **Admin Interface:** Django Unfold
-- **Containerization:** Docker + Docker Compose
+- **Containerization:** Docker
 
 ---
 
@@ -27,29 +29,48 @@ A modern Customer Relationship Management (CRM) system built with Django 5.2. De
 
 ```bash
 crm-system/
+├── .github/workflows/            # GitHub Actions workflows
 ├── .venv/                        # Python Virtual Environment (ignored by Git)
 ├── apps/                         # Django applications
+│   ├── analytics/                # Analytics & dashboard
+│   ├── base/                     # Core app
 │   ├── common/                   # Shared utilities across all apps
-│   ├── security/                 # Authentication and security
-│   └── users/                    # User management and authentication
+│   │   └── templates/            # Reusable UI components
+│   ├── security/                 # Authentication & account management
+│   └── users/                    # User management
 ├── config/                       # Django project settings
 │   ├── formats/                  # Custom date/time/number formats by locale
 │   ├── settings/                 # Split settings (base, dev, prod)
+│   │   ├── base.py
+│   │   ├── dev.py
+│   │   └── prod.py
+│   ├── celery.py                 # Celery instance setup
+│   ├── constants.py              # Project-wide constants
+│   ├── context_processors.py     # Custom template context processors
 │   ├── asgi.py
 │   ├── urls.py
 │   └── wsgi.py
-├── logs/                         # Application logs (ignored by Git)
+├── logs/
 │   ├── app.log                   # Application logs
 │   ├── django.log                # Django framework logs
 │   └── errors.log                # Error-only logs
 ├── media/                        # User-uploaded files
 ├── static/                       # Project-wide static files
-│   └── css
-│       └── output.css            # Compiled Tailwind CSS
+│   ├── css/
+│   │   ├── tailwind/             # Tailwind CSS configuration
+│   │   ├── base.css              # Base styles
+│   │   ├── output.css            # Compiled Tailwind CSS
+│   │   └── variables.css         # Defined CSS variables
+│   └── js/
+│       └── components/           # Component scripts (messages, navbar) 
 ├── staticfiles/                  # Collected static files for production
-├── tailwind/                     # Tailwind CSS configuration
-│   └── input.css                 # Tailwind source CSS
 ├── templates/                    # Project-wide HTML templates
+│   ├── base.html                 # Master template
+│   ├── components/               # Reusable UI components
+│   └── layouts/                  # Layout templates
+│       ├── app.html              # Main app layout
+│       ├── auth.html             # Authentication pages layout
+│       └── error.html            # Error pages layout
 ├── .dockerignore
 ├── .env                          # Environment variables (ignored by Git)
 ├── .env.example                  # Environment variables template
@@ -70,7 +91,7 @@ crm-system/
 
 ### Prerequisites
 
-- **Docker** and **Docker Compose** - [Get Docker](https://docs.docker.com/get-docker/)
+- **Docker** - [Get Docker](https://docs.docker.com/get-docker/)
 - **Make** - Pre-installed on macOS/Linux, [Windows installation](https://gnuwin32.sourceforge.net/packages/make.htm)
 - **Python 3.13** and **uv** - [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
 
@@ -127,6 +148,17 @@ make setup-dev
    # DEV: Defaults to 'admin/' if empty | PROD: Required
    ADMIN_URL=
 
+   # --- SSL Configuration ---
+   # Set to True only when running with valid SSL certificate
+   ENABLE_SSL=False
+
+   # --- Redis Configuration ---
+   # Redis connection URL for caching (used in both dev and prod)
+   # Format: redis://HOST:PORT/DB_NUMBER
+   # For Docker: redis://redis:6379/0
+   # For local: redis://localhost:6379/0
+   REDIS_URL=redis://redis:6379/0
+
    # --- Email Configuration ---
    # Hostname of the email provider's SMTP server
    EMAIL_HOST=smtp.gmail.com
@@ -160,11 +192,6 @@ make setup-dev
    POSTGRES_DB=your_database_name
    POSTGRES_USER=your_database_user
    POSTGRES_PASSWORD=your_database_password
-
-   # Redis connection URL for production caching
-   # Format: redis://HOST:PORT/DB_NUMBER
-   # Example: redis://localhost:6379/0
-   REDIS_URL=redis://localhost:6379/0
 
    # Directory where static files are collected for production
    # Absolute path (e.g., /app/staticfiles)
@@ -218,66 +245,88 @@ make setup-dev
 
 ### Initial Setup
 ```bash
-make setup-dev                # Create initial setup for development
+make setup-dev                    # Create initial setup for development
+make setup-prod                   # Create initial setup for production
 ```
 
 ### Development
 ```bash
-make dev                      # Start development environment
-make dev-build                # Build and start development environment
-make bash                     # Open container bash shell
-make shell                    # Open Django shell
+make dev                          # Start development environment
+make dev-build                    # Build and start development environment
+make bash                         # Open container bash shell
+make shell                        # Open Django shell
 ```
 
 ### Production
 ```bash
-make prod                     # Start production environment
-make prod-build               # Build and start production environment
-make security-status          # Run security configuration checks
+make prod                         # Start production environment
+make prod-build                   # Build and start production environment
+make security-status              # Run security configuration checks
 ```
 
 ### Database
 ```bash
-make migrate                  # Apply database migrations
-make migrations               # Create new migrations
-make showmigrations           # Show migration status
-```
-
-### Application Management
-```bash
-make superuser                # Create Django superuser
-make collectstatic            # Collect static files
-make check                    # Check for project issues
-make test                     # Run test suite
-make tailwind-build           # Build minified CSS for production
-make manage.py cmd="..."      # Run custom manage.py command
+make migrate                      # Apply database migrations
+make migrations                   # Create new migrations
+make showmigrations               # Show migration status
 ```
 
 ### Container Management
 ```bash
-make build                    # Build Docker images
-make status                   # Show container status
-make restart                  # Restart containers
-make down                     # Stop and remove containers
-make clean                    # Remove cache and OS-generated files
-make reset                    # Remove ALL containers, volumes, and data
+make build                        # Build Docker images
+make status                       # Show container status
+make restart                      # Restart containers
+make down                         # Stop and remove containers
+make clean                        # Remove cache and OS-generated files
+make reset                        # Remove ALL containers, volumes, and data
+```
+
+### Application Management
+```bash
+make superuser                    # Create Django superuser
+make collectstatic                # Collect static files
+make check                        # Check for project issues
+make test                         # Run test suite
+make build-css                    # Build minified CSS for production
+make manage.py cmd="..."          # Run custom manage.py command
+```
+
+### Task Management
+```bash
+make celery-worker                # Start Celery worker
+make celery-status                # Check Celery worker status
 ```
 
 ### Logs
 ```bash
-make service-logs             # Show service logs
-make app-logs                 # Show application logs
-make error-logs               # Show error logs
-make django-logs              # Show Django logs
+# View main container logs
+make service-logs                 # View environment container logs
+make service-logs follow=true     # Follow logs in real-time
+
+# View specific service logs
+make service-logs service=db      # View PostgreSQL database logs
+make service-logs service=celery  # View Celery logs
+make service-logs service=redis   # View Redis logs
+
+# View application file logs
+make app-logs                     # View logs/app.log
+make error-logs                   # View logs/errors.log
+make django-logs                  # View logs/django.log
+
+# View more/fewer lines (default: 20)
+make app-logs lines=10
+make service-logs service=db lines=100
+
+# Combine options
+make service-logs lines=50 follow=true
+make service-logs service=celery follow=true
 ```
 
 ---
 
 ## 📝 Notes
 
-- **Development mode** uses SQLite by default and runs Django's development server with live code reload via volume mounting. Optional PostgreSQL and Redis support available.
-- **Production mode** requires PostgreSQL and Redis, runs Gunicorn with immutable container images
-- Logs are automatically rotated (max 10MB per file, 5 backups)
-- Static files are served via WhiteNoise in production
-- Session expires after 1 day or when browser closes
-- **Note:** Make commands require at least one container to be running. If no containers are running, start with `make dev` or `make prod` first.
+- **Development mode** uses SQLite, Redis, and Celery by default, runs Django's development server with live code reload via volume mounting. Optional PostgreSQL support available.
+- **Production mode** requires PostgreSQL, Redis, and Celery, runs Gunicorn with immutable container images
+- **Application file logs** are automatically rotated (max 10MB per file, 5 backups)
+- **Make commands** require at least one container to be running. If no containers are running, start with `make dev` or `make prod` first.
