@@ -63,7 +63,7 @@ class User(AbstractUser):
         if is_new:
             # Log new user
             logger.info(
-                f"New user created: {self.username} "
+                f"New user created: {self.username}, "
                 f"Email: {self.get_field('email')}, "
                 f"Phone: {self.get_field('phone')}, "
                 f"First Name: {self.get_field('first_name')}, "
